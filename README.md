@@ -22,7 +22,7 @@ Usage
 ### klawSync(directory[, options])
 
 - `directory` `{String}`
-- `options` `{Object}` *optional* (All options are `false` by default)
+- `options` `{Object}` *optional* (all options are `false` by default)
  - `ignore` `{String | Array<String>}` any paths or [minimatch](https://github.com/isaacs/minimatch) patterns to ignore (can be string or an array of strings)
  - `nodir` `{Boolean}` return only files (ignore directories)
  - `nofile` `{Boolean}` return only directories (ignore files)
@@ -109,7 +109,7 @@ The `bm.js` can be used like:
 
 **_with ignore_**
 
-_patterns will be concatenated into an array_
+_patterns will be concatenated into an array of patterns_
 
 `node bm.js /some/dir --ignore "{node_modules,.git}"`
 
