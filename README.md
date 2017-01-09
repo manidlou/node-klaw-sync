@@ -7,9 +7,9 @@ Node.js: klaw-sync
 
 <a href="https://github.com/feross/standard"><img src="https://cdn.rawgit.com/feross/standard/master/sticker.svg" alt="Standard JavaScript" width="100"></a>
 
-`klaw-sync` is a recursive file system walker, which is the synchronous counterpart of [klaw](https://github.com/jprichardson/node-klaw). It lists all files and directories inside a directory recursively and returns an array of objects that each object has `path` (abosulte path of the file or dir) and [stats](https://nodejs.org/api/fs.html#fs_class_fs_stats) properties.
+`klaw-sync` is a recursive file system walker, which is the synchronous counterpart of [klaw](https://github.com/jprichardson/node-klaw). It lists all files and directories inside a directory recursively and returns an array of objects that each object has two properties: `path` and `stats`. `path` is the full path of the file or directory and `stats` is an instance of [fs.Stats](https://nodejs.org/api/fs.html#fs_class_fs_stats).
 
-*Special thanks to [agnivade](https://github.com/agnivade), [jprichardson](https://github.com/jprichardson) and [RyanZim](https://github.com/RyanZim) for their contribution and support.*
+**Special thanks to [agnivade](https://github.com/agnivade), [jprichardson](https://github.com/jprichardson) and [RyanZim](https://github.com/RyanZim) for their contribution and support.**
 
 Install
 -------
