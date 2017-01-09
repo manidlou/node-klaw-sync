@@ -1,13 +1,43 @@
 'use strict'
 var assert = require('assert')
-var fs = require('fs-extra')
+var os = require('os')
 var path = require('path')
+var fs = require('fs-extra')
 
 var klawSync = require('../')
 
-var fixturesDir = path.join(__dirname, 'fixtures')
-
 describe('klaw-sync', function () {
+
+  var TEST_DIR
+  var FIXTURES_DIR
+  var DIRS
+  var FILES
+  var dirnames = ['dir1', 'dir2', 'dir2/dir2_1', 'dir2/dir2_1/dir2_1_1']
+  var filenames = ['dir1/file1_2', 'dir2/dir2_1/file2_1_1', 'file1']
+
+  beforeEach(function () {
+    TEST_DIR = path.join(os.tmpdir(), 'klaw-sync')
+    FIXTURES_DIR = path.join(TEST_DIR, 'fixtures')
+    fs.emptyDirSync(TEST_DIR)
+    DIRS = dirnames.map(function (dir) {
+      return path.join(FIXTURES_DIR, dir)
+    })
+    FILES = filenames.map(function (f) {
+      return path.join(FIXTURES_DIR, f)
+    })
+    DIRS.forEach(function (dir) {
+      fs.ensureDirSync(dir)
+    })
+    FILES.forEach(function (f) {
+      fs.ensureFileSync(f)
+    })
+  })
+
+  afterEach(function (done) {
+    fs.removeSync(TEST_DIR)
+    done()
+  })
+
   it('should return an error if the source dir does not exist', function (done) {
     try {
       klawSync('dirDoesNotExist/')
@@ -20,7 +50,7 @@ describe('klaw-sync', function () {
 
   it('should return an error if the source is not a dir', function (done) {
     try {
-      klawSync(path.join(fixturesDir, 'dir1/file1_2'))
+      klawSync(FILES[0])
     } catch (err) {
       assert.equal(err.code, 'ENOTDIR')
     } finally {
@@ -29,24 +59,16 @@ describe('klaw-sync', function () {
   })
 
   it('should return all items of a dir containing path and stats object', function (done) {
-    var files = ['dir1/file1_2', 'dir2/dir2_1/file2_1_1', 'file1']
-    files = files.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
-    var dirs = ['dir1', 'dir2', 'dir2/dir2_1', 'dir2/dir2_1/dir2_1_1']
-    dirs = dirs.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
     var expectedItems = [
-      {path: dirs[0], stats: fs.lstatSync(dirs[0])},
-      {path: files[0], stats: fs.lstatSync(files[0])},
-      {path: dirs[1], stats: fs.lstatSync(dirs[1])},
-      {path: dirs[2], stats: fs.lstatSync(dirs[2])},
-      {path: dirs[3], stats: fs.lstatSync(dirs[3])},
-      {path: files[1], stats: fs.lstatSync(files[1])},
-      {path: files[2], stats: fs.lstatSync(files[2])}
+      {path: DIRS[0], stats: fs.lstatSync(DIRS[0])},
+      {path: FILES[0], stats: fs.lstatSync(FILES[0])},
+      {path: DIRS[1], stats: fs.lstatSync(DIRS[1])},
+      {path: DIRS[2], stats: fs.lstatSync(DIRS [2])},
+      {path: DIRS[3], stats: fs.lstatSync(DIRS[3])},
+      {path: FILES[1], stats: fs.lstatSync(FILES[1])},
+      {path: FILES[2], stats: fs.lstatSync(FILES[2])}
     ]
-    var items = klawSync(fixturesDir)
+    var items = klawSync(FIXTURES_DIR)
     assert.equal(items.length, expectedItems.length)
     items.forEach(function (elem, i) {
       assert.deepEqual(elem, expectedItems[i])
@@ -57,20 +79,12 @@ describe('klaw-sync', function () {
   })
 
   it('should return only files if opts.files is true', function (done) {
-    var files = ['dir1/file1_2', 'dir2/dir2_1/file2_1_1', 'file1']
-    files = files.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
-    var dirs = ['dir1', 'dir2', 'dir2/dir2_1', 'dir2/dir2_1/dir2_1_1']
-    dirs = dirs.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
     var expectedItems = [
-      {path: files[0], stats: fs.lstatSync(files[0])},
-      {path: files[1], stats: fs.lstatSync(files[1])},
-      {path: files[2], stats: fs.lstatSync(files[2])}
+      {path: FILES[0], stats: fs.lstatSync(FILES[0])},
+      {path: FILES[1], stats: fs.lstatSync(FILES[1])},
+      {path: FILES[2], stats: fs.lstatSync(FILES[2])}
     ]
-    var actualFiles = klawSync(fixturesDir, {files: true})
+    var actualFiles = klawSync(FIXTURES_DIR, {files: true})
     assert.equal(actualFiles.length, expectedItems.length)
     actualFiles.forEach(function (elem, i) {
       assert.deepEqual(elem, expectedItems[i])
@@ -81,21 +95,13 @@ describe('klaw-sync', function () {
   })
 
   it('should return only dirs if opts.dirs is true', function (done) {
-    var files = ['dir1/file1_2', 'dir2/dir2_1/file2_1_1', 'file1']
-    files = files.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
-    var dirs = ['dir1', 'dir2', 'dir2/dir2_1', 'dir2/dir2_1/dir2_1_1']
-    dirs = dirs.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
     var expectedItems = [
-      {path: dirs[0], stats: fs.lstatSync(dirs[0])},
-      {path: dirs[1], stats: fs.lstatSync(dirs[1])},
-      {path: dirs[2], stats: fs.lstatSync(dirs[2])},
-      {path: dirs[3], stats: fs.lstatSync(dirs[3])}
+      {path: DIRS[0], stats: fs.lstatSync(DIRS[0])},
+      {path: DIRS[1], stats: fs.lstatSync(DIRS[1])},
+      {path: DIRS[2], stats: fs.lstatSync(DIRS[2])},
+      {path: DIRS[3], stats: fs.lstatSync(DIRS[3])}
     ]
-    var actualDirs = klawSync(fixturesDir, {dirs: true})
+    var actualDirs = klawSync(FIXTURES_DIR, {dirs: true})
     assert.equal(actualDirs.length, expectedItems.length)
     actualDirs.forEach(function (elem, i) {
       assert.deepEqual(elem, expectedItems[i])
@@ -106,26 +112,18 @@ describe('klaw-sync', function () {
   })
 
   it('should ignore if opts.ignore is path name', function (done) {
-    var dirToIgnore = path.join(fixturesDir, 'node_modules')
+    var dirToIgnore = path.join(FIXTURES_DIR, 'node_modules')
     fs.ensureDirSync(dirToIgnore)
-    var files = ['dir1/file1_2', 'dir2/dir2_1/file2_1_1', 'file1']
-    files = files.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
-    var dirs = ['dir1', 'dir2', 'dir2/dir2_1', 'dir2/dir2_1/dir2_1_1']
-    dirs = dirs.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
     var expectedItems = [
-      {path: dirs[0], stats: fs.lstatSync(dirs[0])},
-      {path: files[0], stats: fs.lstatSync(files[0])},
-      {path: dirs[1], stats: fs.lstatSync(dirs[1])},
-      {path: dirs[2], stats: fs.lstatSync(dirs[2])},
-      {path: dirs[3], stats: fs.lstatSync(dirs[3])},
-      {path: files[1], stats: fs.lstatSync(files[1])},
-      {path: files[2], stats: fs.lstatSync(files[2])}
+      {path: DIRS[0], stats: fs.lstatSync(DIRS[0])},
+      {path: FILES[0], stats: fs.lstatSync(FILES[0])},
+      {path: DIRS[1], stats: fs.lstatSync(DIRS[1])},
+      {path: DIRS[2], stats: fs.lstatSync(DIRS [2])},
+      {path: DIRS[3], stats: fs.lstatSync(DIRS[3])},
+      {path: FILES[1], stats: fs.lstatSync(FILES[1])},
+      {path: FILES[2], stats: fs.lstatSync(FILES[2])}
     ]
-    var items = klawSync(fixturesDir, {ignore: 'node_modules'})
+    var items = klawSync(FIXTURES_DIR, {ignore: 'node_modules'})
     assert.equal(items.length, expectedItems.length)
     items.forEach(function (elem, i) {
       assert.deepEqual(elem, expectedItems[i])
@@ -137,28 +135,20 @@ describe('klaw-sync', function () {
   })
 
   it('should ignore if opts.ignore is minimatch pattern', function (done) {
-    var dirToIgnore1 = path.join(fixturesDir, 'node_modules')
-    var dirToIgnore2 = path.join(fixturesDir, '.git')
+    var dirToIgnore1 = path.join(FIXTURES_DIR, 'node_modules')
+    var dirToIgnore2 = path.join(FIXTURES_DIR, '.git')
     fs.ensureDirSync(dirToIgnore1)
     fs.ensureDirSync(dirToIgnore2)
-    var files = ['dir1/file1_2', 'dir2/dir2_1/file2_1_1', 'file1']
-    files = files.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
-    var dirs = ['dir1', 'dir2', 'dir2/dir2_1', 'dir2/dir2_1/dir2_1_1']
-    dirs = dirs.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
     var expectedItems = [
-      {path: dirs[0], stats: fs.lstatSync(dirs[0])},
-      {path: files[0], stats: fs.lstatSync(files[0])},
-      {path: dirs[1], stats: fs.lstatSync(dirs[1])},
-      {path: dirs[2], stats: fs.lstatSync(dirs[2])},
-      {path: dirs[3], stats: fs.lstatSync(dirs[3])},
-      {path: files[1], stats: fs.lstatSync(files[1])},
-      {path: files[2], stats: fs.lstatSync(files[2])}
+      {path: DIRS[0], stats: fs.lstatSync(DIRS[0])},
+      {path: FILES[0], stats: fs.lstatSync(FILES[0])},
+      {path: DIRS[1], stats: fs.lstatSync(DIRS[1])},
+      {path: DIRS[2], stats: fs.lstatSync(DIRS [2])},
+      {path: DIRS[3], stats: fs.lstatSync(DIRS[3])},
+      {path: FILES[1], stats: fs.lstatSync(FILES[1])},
+      {path: FILES[2], stats: fs.lstatSync(FILES[2])}
     ]
-    var items = klawSync(fixturesDir, {ignore: '{node_modules,.git}'})
+    var items = klawSync(FIXTURES_DIR, {ignore: '{node_modules,.git}'})
     assert.equal(items.length, expectedItems.length)
     items.forEach(function (elem, i) {
       assert.deepEqual(elem, expectedItems[i])
@@ -171,32 +161,24 @@ describe('klaw-sync', function () {
   })
 
   it('should ignore if opts.ignore is array', function (done) {
-    var dirToIgnore1 = path.join(fixturesDir, 'node_modules')
-    var dirToIgnore2 = path.join(fixturesDir, '.git')
-    var fileToIgnore1 = path.join(fixturesDir, 'dir1', 'somefile.md')
-    var fileToIgnore2 = path.join(fixturesDir, 'dir2/dir2_1', 'someotherfile.md')
+    var dirToIgnore1 = path.join(FIXTURES_DIR, 'node_modules')
+    var dirToIgnore2 = path.join(FIXTURES_DIR, '.git')
+    var fileToIgnore1 = path.join(FIXTURES_DIR, 'dir1', 'somefile.md')
+    var fileToIgnore2 = path.join(FIXTURES_DIR, 'dir2/dir2_1', 'someotherfile.md')
     fs.ensureDirSync(dirToIgnore1)
     fs.ensureDirSync(dirToIgnore2)
     fs.ensureFileSync(fileToIgnore1)
     fs.ensureFileSync(fileToIgnore2)
-    var files = ['dir1/file1_2', 'dir2/dir2_1/file2_1_1', 'file1']
-    files = files.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
-    var dirs = ['dir1', 'dir2', 'dir2/dir2_1', 'dir2/dir2_1/dir2_1_1']
-    dirs = dirs.map(function (item) {
-      return path.join(fixturesDir, item)
-    })
     var expectedItems = [
-      {path: dirs[0], stats: fs.lstatSync(dirs[0])},
-      {path: files[0], stats: fs.lstatSync(files[0])},
-      {path: dirs[1], stats: fs.lstatSync(dirs[1])},
-      {path: dirs[2], stats: fs.lstatSync(dirs[2])},
-      {path: dirs[3], stats: fs.lstatSync(dirs[3])},
-      {path: files[1], stats: fs.lstatSync(files[1])},
-      {path: files[2], stats: fs.lstatSync(files[2])}
+      {path: DIRS[0], stats: fs.lstatSync(DIRS[0])},
+      {path: FILES[0], stats: fs.lstatSync(FILES[0])},
+      {path: DIRS[1], stats: fs.lstatSync(DIRS[1])},
+      {path: DIRS[2], stats: fs.lstatSync(DIRS [2])},
+      {path: DIRS[3], stats: fs.lstatSync(DIRS[3])},
+      {path: FILES[1], stats: fs.lstatSync(FILES[1])},
+      {path: FILES[2], stats: fs.lstatSync(FILES[2])}
     ]
-    var items = klawSync(fixturesDir, {ignore: ['{node_modules,.git}', '*.md']})
+    var items = klawSync(FIXTURES_DIR, {ignore: ['{node_modules,.git}', '*.md']})
     assert.equal(items.length, expectedItems.length)
     items.forEach(function (elem, i) {
       assert.deepEqual(elem, expectedItems[i])
