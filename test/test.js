@@ -78,13 +78,13 @@ describe('klaw-sync', function () {
     done()
   })
 
-  it('should return only files if opts.files is true', function (done) {
+  it('should return only files if opts.nodir is true', function (done) {
     var expectedItems = [
       {path: FILES[0], stats: fs.lstatSync(FILES[0])},
       {path: FILES[1], stats: fs.lstatSync(FILES[1])},
       {path: FILES[2], stats: fs.lstatSync(FILES[2])}
     ]
-    var actualFiles = klawSync(FIXTURES_DIR, {files: true})
+    var actualFiles = klawSync(FIXTURES_DIR, {nodir: true})
     assert.equal(actualFiles.length, expectedItems.length)
     actualFiles.forEach(function (elem, i) {
       assert.deepEqual(elem, expectedItems[i])
@@ -94,14 +94,14 @@ describe('klaw-sync', function () {
     done()
   })
 
-  it('should return only dirs if opts.dirs is true', function (done) {
+  it('should return only dirs if opts.nofile is true', function (done) {
     var expectedItems = [
       {path: DIRS[0], stats: fs.lstatSync(DIRS[0])},
       {path: DIRS[1], stats: fs.lstatSync(DIRS[1])},
       {path: DIRS[2], stats: fs.lstatSync(DIRS[2])},
       {path: DIRS[3], stats: fs.lstatSync(DIRS[3])}
     ]
-    var actualDirs = klawSync(FIXTURES_DIR, {dirs: true})
+    var actualDirs = klawSync(FIXTURES_DIR, {nofile: true})
     assert.equal(actualDirs.length, expectedItems.length)
     actualDirs.forEach(function (elem, i) {
       assert.deepEqual(elem, expectedItems[i])

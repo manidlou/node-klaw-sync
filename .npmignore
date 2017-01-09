@@ -1,4 +1,6 @@
 test/
+appveyor.yml
+bm.js
 .gitignore
 .npmignore
 .travis.yml

@@ -22,10 +22,10 @@ Usage
 ### klawSync(directory[, options])
 
 - `directory` `{String}`
-- `options` `{Object}` *optional*
+- `options` `{Object}` *optional* All options are `false` by default.
  - `ignore` `{String | Array<String>}` any paths or [minimatch](https://github.com/isaacs/minimatch) patterns to ignore (can be string or an array of strings)
- - `files` `{Boolean}` return only files
- - `dirs` `{Boolean}` return only directories
+ - `nodir` `{Boolean}` return only files (ignore directories)
+ - `nofile` `{Boolean}` return only directories (ignore files)
 
 - `@return` `[{path: '', stats: {}}]`
 
@@ -56,7 +56,7 @@ console.log(paths)
 
 ```js
 var klawSync = require('klaw-sync')
-var files = klawSync('/some/dir', {files: true})
+var files = klawSync('/some/dir', {nodir: true})
 // files = [{path: '/some/dir/file1', stats: {}}, {path: '/some/dir/file2', stats: {}}]
 ```
 
@@ -64,7 +64,7 @@ var files = klawSync('/some/dir', {files: true})
 
 ```js
 var klawSync = require('klaw-sync')
-var dirs = klawSync('/some/dir', {dirs: true})
+var dirs = klawSync('/some/dir', {nofile: true})
 // dirs = [{path: '/some/dir/dir1', stats: {}}, {path: '/some/dir/dir2', stats: {}}]
 ```
 
@@ -88,6 +88,30 @@ var paths = klawSync('/some/dir', {ignore: '{node_modules,.git}'})
 var klawSync = require('klaw-sync')
 var paths = klawSync('/some/dir', {ignore: ['{node_modules,.git}', '*.js']})
 ```
+
+Performance comparison to other similar modules
+-----------------------------------------------
+
+Sometimes it's fun to run speed tests on similar functions or modules. The `bm.js` runs some basic [benchmark](https://github.com/bestiejs/benchmark.js) tests for two cases, `without --ignore` (basic usage) and `with --ignore`, on these modules:
+
+- `klaw-sync`
+- [walk-sync](https://github.com/joliss/node-walk-sync)
+- [glob.sync](https://github.com/isaacs/node-glob#globsyncpattern-options)
+- [fs-readdir-recursive](https://github.com/fs-utils/fs-readdir-recursive) (only for basic usage, I am not sure if they support glob patterns)
+
+All of these modules are great pieces of software. Just for fun, it turned out for the most cases `klaw-sync` is faster than other modules!
+
+The `bm.js` can be used like:
+
+*basic usage without ignore*
+
+`node bm.js /some/dir`
+
+*with ignore*
+
+`node bm.js /some/dir --ignore "{node_modules,.git}"`
+
+`node bm.js /some/dir --ignore "{node_modules,.git}" "*.js"`
 
 License
 -------

@@ -8,35 +8,46 @@ try {
   fs = require('fs')
 }
 
+function _procPath (dir, file, opts, list) {
+  var nestedPath
+  var stat
+  if (path.sep === '/') {
+    nestedPath = dir + '/' + file
+  } else {
+    nestedPath = dir + '\\' + file
+  }
+  stat = fs.lstatSync(nestedPath)
+  if (stat.isDirectory()) {
+    if (!opts.nodir) {
+      list.push({path: nestedPath, stats: stat})
+    }
+    list = walkSync(nestedPath, opts, list)
+  } else {
+    if (!opts.nofile) {
+      list.push({path: nestedPath, stats: stat})
+    }
+  }
+}
+
 function walkSync (dir, opts, list) {
   var files
+  var ignore = []
   opts = opts || {}
   list = list || []
   try {
     files = fs.readdirSync(dir)
     if (opts.ignore) {
-      files = files.filter(function (i) { return mm(files, opts.ignore).indexOf(i) < 0 })
+      ignore = mm(files, opts.ignore)
     }
   } catch (er) {
     return er
   }
   files.forEach(function (file) {
-    var nestedPath
-    var stat
-    if (path.sep === '/') {
-      nestedPath = dir + '/' + file
+    if (ignore.length < 0) {
+      _procPath(dir, file, opts, list)
     } else {
-      nestedPath = dir + '\\' + file
-    }
-    stat = fs.lstatSync(nestedPath)
-    if (stat.isDirectory()) {
-      if (!opts.files) {
-        list.push({path: nestedPath, stats: stat})
-      }
-      list = walkSync(nestedPath, opts, list)
-    } else {
-      if (!opts.dirs) {
-        list.push({path: nestedPath, stats: stat})
+      if (ignore.indexOf(file) < 0) {
+        _procPath(dir, file, opts, list)
       }
     }
   })
