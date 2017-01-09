@@ -7,7 +7,6 @@ var fs = require('fs-extra')
 var klawSync = require('../')
 
 describe('klaw-sync', function () {
-
   var TEST_DIR
   var FIXTURES_DIR
   var DIRS
@@ -32,7 +31,6 @@ describe('klaw-sync', function () {
       fs.ensureFileSync(f)
     })
   })
-
   afterEach(function (done) {
     fs.removeSync(TEST_DIR)
     done()

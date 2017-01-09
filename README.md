@@ -9,8 +9,6 @@ Node.js: klaw-sync
 
 `klaw-sync` is a recursive file system walker, which is the synchronous counterpart of [klaw](https://github.com/jprichardson/node-klaw). It lists all files and directories inside a directory recursively and returns an array of objects that each object has two properties: `path` and `stats`. `path` is the full path of the file or directory and `stats` is an instance of [fs.Stats](https://nodejs.org/api/fs.html#fs_class_fs_stats).
 
-**Special thanks to [agnivade](https://github.com/agnivade), [jprichardson](https://github.com/jprichardson) and [RyanZim](https://github.com/RyanZim) for their contribution and support.**
-
 Install
 -------
 
@@ -99,7 +97,9 @@ Sometimes it's fun to run speed tests on similar functions or modules. The `bm.j
 - [glob.sync](https://github.com/isaacs/node-glob#globsyncpattern-options)
 - [fs-readdir-recursive](https://github.com/fs-utils/fs-readdir-recursive) (only for basic usage, I am not sure if they support glob patterns)
 
-All of these modules are great pieces of software. Just for fun, it turned out for the most cases `klaw-sync` is faster than other modules!
+All of these modules are great pieces of software. I appreciate the authors works. I've personally learned a lot from them.
+
+Just for fun, it turned out for the most cases `klaw-sync` is faster than other modules!
 
 The `bm.js` can be used like:
 
@@ -114,6 +114,17 @@ _patterns will be concatenated into an array of patterns_
 `node bm.js /some/dir --ignore "{node_modules,.git}"`
 
 `node bm.js /some/dir --ignore "{node_modules,.git}" "*.js"`
+
+Credit
+------
+
+Special thanks to:
+
+- [agnivade](https://github.com/agnivade)
+- [jprichardson](https://github.com/jprichardson)
+- [RyanZim](https://github.com/RyanZim)
+
+for their contribution and support.
 
 License
 -------

@@ -43,7 +43,7 @@ function walkSync (dir, opts, list) {
     return er
   }
   files.forEach(function (file) {
-    if (ignore.length < 0) {
+    if (ignore.length <= 0) {
       _procPath(dir, file, opts, list)
     } else {
       if (ignore.indexOf(file) < 0) {

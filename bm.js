@@ -1,10 +1,10 @@
 'use strict'
 const path = require('path')
 const Benchmark = require('benchmark')
-const walk_sync = require('walk-sync')
-const glob_sync = require('glob').sync
-const fs_readdir_recur_sync = require('fs-readdir-recursive')
-const klaw_sync = require('./klaw-sync.js')
+const walkSync = require('walk-sync')
+const globSync = require('glob').sync
+const fsReaddirRecurSync = require('fs-readdir-recursive')
+const klawSync = require('./klaw-sync.js')
 
 function help () {
   console.log(`Usage:\n`)
@@ -13,7 +13,7 @@ function help () {
   console.log(`node bm.js <rootdir> --ignore "{node_modules,.git}" "*.js" (ignore node_modules, .git and all js files)`)
 }
 
-function parse_argv () {
+function parseArgv () {
   var args = process.argv
   var opts = {}
   if (args.length <= 2) {
@@ -32,12 +32,12 @@ function parse_argv () {
   }
 }
 
-function bm_ignore (root, ign) {
-  var suite = new Benchmark.Suite;
+function bmIgnore (root, ign) {
+  var suite = Benchmark.Suite()
   suite.add('walk-sync', function () {
-    walk_sync(root, {ignore: ign})
+    walkSync(root, {ignore: ign})
   }).add('glob-sync', function () {
-    glob_sync('**', {
+    globSync('**', {
       cwd: root,
       dot: true,
       mark: true,
@@ -45,7 +45,7 @@ function bm_ignore (root, ign) {
       ignore: ign
     })
   }).add('klaw-sync', function () {
-    klaw_sync(root, {ignore: ign})
+    klawSync(root, {ignore: ign})
   }).on('error', function (er) {
     return er
   }).on('cycle', function (ev) {
@@ -55,21 +55,21 @@ function bm_ignore (root, ign) {
   }).run({ 'async': true })
 }
 
-function bm_basic (root) {
-  var suite = new Benchmark.Suite;
+function bmBasic (root) {
+  var suite = Benchmark.Suite()
   suite.add('walk-sync', function () {
-    walk_sync(root)
+    walkSync(root)
   }).add('glob-sync', function () {
-    glob_sync('**', {
+    globSync('**', {
       cwd: root,
       dot: true,
       mark: true,
       strict: true
     })
   }).add('klaw-sync', function () {
-    klaw_sync(root)
+    klawSync(root)
   }).add('fs-readdir-recursive', function () {
-    fs_readdir_recur_sync(root)
+    fsReaddirRecurSync(root)
   }).on('error', function (er) {
     return er
   }).on('cycle', function (ev) {
@@ -80,12 +80,12 @@ function bm_basic (root) {
 }
 
 try {
-  var opts = parse_argv()
+  var opts = parseArgv()
   console.log('Running benchmark tests...\n')
   if (opts.ignore) {
-    bm_ignore(opts.root, opts.ignore)
+    bmIgnore(opts.root, opts.ignore)
   } else {
-    bm_basic(opts.root)
+    bmBasic(opts.root)
   }
 } catch (er) {
   throw er
