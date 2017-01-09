@@ -22,12 +22,12 @@ Usage
 ### klawSync(directory[, options])
 
 - `directory` `{String}`
-- `options` `{Object}` *optional* All options are `false` by default.
+- `options` `{Object}` *optional* (All options are `false` by default)
  - `ignore` `{String | Array<String>}` any paths or [minimatch](https://github.com/isaacs/minimatch) patterns to ignore (can be string or an array of strings)
  - `nodir` `{Boolean}` return only files (ignore directories)
  - `nofile` `{Boolean}` return only directories (ignore files)
 
-- `@return` `[{path: '', stats: {}}]`
+- return: `{Array<Object>}` `[{path: '', stats: {}}]`
 
 Examples
 --------
@@ -103,11 +103,13 @@ All of these modules are great pieces of software. Just for fun, it turned out f
 
 The `bm.js` can be used like:
 
-*basic usage without ignore*
+**_basic usage without ignore_**
 
 `node bm.js /some/dir`
 
-*with ignore*
+**_with ignore_**
+
+_patterns will be concatenated into an array_
 
 `node bm.js /some/dir --ignore "{node_modules,.git}"`
 
@@ -117,3 +119,4 @@ License
 -------
 
 Licensed under MIT
+
