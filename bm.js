@@ -7,7 +7,7 @@ const fsReaddirRecurSync = require('fs-readdir-recursive')
 const klawSync = require('./klaw-sync.js')
 
 function help () {
-  console.log(`Usage:\n`)
+  console.log(`Usage examples:\n`)
   console.log(`node bm.js <rootdir> (basic)`)
   console.log(`node bm.js <rootdir> --ignore "{node_modules,.git}" (ignore node_modules and .git directories)`)
   console.log(`node bm.js <rootdir> --ignore "{node_modules,.git}" "*.js" (ignore node_modules, .git and all js files)`)
@@ -19,6 +19,7 @@ function parseArgv () {
   if (args.length <= 2) {
     console.error('err: root dir must be specified.\n')
     help()
+    process.exit(1)
   } else {
     try {
       opts.root = path.resolve(args[2])
