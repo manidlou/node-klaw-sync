@@ -3,12 +3,9 @@
   "version": "1.0.0",
   "description": "Recursive and synchronous file system walker",
   "main": "klaw-sync.js",
-  "scripts": {
-    "test": "standard ./klaw-sync.js ./bm.js && mocha"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mawni/klaw-sync.git"
+    "url": "git+https://github.com/mawni/node-klaw-sync.git"
   },
   "keywords": [
     "fs",
@@ -18,12 +15,12 @@
     "klaw",
     "readdir-sync"
   ],
-  "author": "Mawni Maghsoudlou",
+  "author": "Mani Maghsoudlou",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mawni/klaw-sync/issues"
+    "url": "https://github.com/mawni/node-klaw-sync/issues"
   },
-  "homepage": "https://github.com/mawni/klaw-sync#readme",
+  "homepage": "https://github.com/mawni/node-klaw-sync#readme",
   "dependencies": {
     "multimatch": "^2.1.0"
   },
@@ -38,5 +35,13 @@
   },
   "optionalDependencies": {
     "graceful-fs": "^4.1.11"
+  },
+  "standard": {
+    "env": ["mocha"]
+  },
+  "scripts": {
+    "lint": "standard",
+    "unit": "mocha",
+    "test": "npm run lint && npm run unit"
   }
 }

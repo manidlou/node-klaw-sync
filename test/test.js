@@ -61,7 +61,7 @@ describe('klaw-sync', function () {
       {path: DIRS[0], stats: fs.lstatSync(DIRS[0])},
       {path: FILES[0], stats: fs.lstatSync(FILES[0])},
       {path: DIRS[1], stats: fs.lstatSync(DIRS[1])},
-      {path: DIRS[2], stats: fs.lstatSync(DIRS [2])},
+      {path: DIRS[2], stats: fs.lstatSync(DIRS[2])},
       {path: DIRS[3], stats: fs.lstatSync(DIRS[3])},
       {path: FILES[1], stats: fs.lstatSync(FILES[1])},
       {path: FILES[2], stats: fs.lstatSync(FILES[2])}
@@ -116,7 +116,7 @@ describe('klaw-sync', function () {
       {path: DIRS[0], stats: fs.lstatSync(DIRS[0])},
       {path: FILES[0], stats: fs.lstatSync(FILES[0])},
       {path: DIRS[1], stats: fs.lstatSync(DIRS[1])},
-      {path: DIRS[2], stats: fs.lstatSync(DIRS [2])},
+      {path: DIRS[2], stats: fs.lstatSync(DIRS[2])},
       {path: DIRS[3], stats: fs.lstatSync(DIRS[3])},
       {path: FILES[1], stats: fs.lstatSync(FILES[1])},
       {path: FILES[2], stats: fs.lstatSync(FILES[2])}
@@ -141,7 +141,7 @@ describe('klaw-sync', function () {
       {path: DIRS[0], stats: fs.lstatSync(DIRS[0])},
       {path: FILES[0], stats: fs.lstatSync(FILES[0])},
       {path: DIRS[1], stats: fs.lstatSync(DIRS[1])},
-      {path: DIRS[2], stats: fs.lstatSync(DIRS [2])},
+      {path: DIRS[2], stats: fs.lstatSync(DIRS[2])},
       {path: DIRS[3], stats: fs.lstatSync(DIRS[3])},
       {path: FILES[1], stats: fs.lstatSync(FILES[1])},
       {path: FILES[2], stats: fs.lstatSync(FILES[2])}
@@ -171,7 +171,7 @@ describe('klaw-sync', function () {
       {path: DIRS[0], stats: fs.lstatSync(DIRS[0])},
       {path: FILES[0], stats: fs.lstatSync(FILES[0])},
       {path: DIRS[1], stats: fs.lstatSync(DIRS[1])},
-      {path: DIRS[2], stats: fs.lstatSync(DIRS [2])},
+      {path: DIRS[2], stats: fs.lstatSync(DIRS[2])},
       {path: DIRS[3], stats: fs.lstatSync(DIRS[3])},
       {path: FILES[1], stats: fs.lstatSync(FILES[1])},
       {path: FILES[2], stats: fs.lstatSync(FILES[2])}

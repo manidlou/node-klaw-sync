@@ -11,6 +11,8 @@ try {
 function _procPath (dir, file, opts, list) {
   var nestedPath
   var stat
+  // use string concatenation which is faster than
+  // path.join() and path.resolve()
   if (path.sep === '/') {
     nestedPath = dir + '/' + file
   } else {

@@ -2,8 +2,8 @@ Node.js: klaw-sync
 =================
 
 [![npm Package](https://img.shields.io/npm/v/klaw-sync.svg?style=flat-square)](https://www.npmjs.com/package/klaw-sync)
-[![Build Status](https://travis-ci.org/mawni/klaw-sync.svg?branch=master)](https://travis-ci.org/mawni/klaw-sync)
-[![windows Build status](https://img.shields.io/appveyor/ci/mawni/klaw-sync/master.svg?label=windows%20build)](https://ci.appveyor.com/project/mawni/klaw-sync/branch/master)
+[![Build Status](https://travis-ci.org/mawni/node-klaw-sync.svg?branch=master)](https://travis-ci.org/mawni/node-klaw-sync)
+[![windows Build status](https://img.shields.io/appveyor/ci/mawni/node-klaw-sync/master.svg?label=windows%20build)](https://ci.appveyor.com/project/mawni/node-klaw-sync/branch/master)
 
 <a href="https://github.com/feross/standard"><img src="https://cdn.rawgit.com/feross/standard/master/sticker.svg" alt="Standard JavaScript" width="100"></a>
 
@@ -105,7 +105,7 @@ The `bm.js` can be used like:
 
 **_basic usage without ignore_**
 
-`node bm.js /some/dir`
+`node bm.js <root dir to walk>`
 
 **_with ignore_**
 
@@ -114,6 +114,16 @@ _patterns will be concatenated into an array of patterns_
 `node bm.js /some/dir --ignore "{node_modules,.git}"`
 
 `node bm.js /some/dir --ignore "{node_modules,.git}" "*.js"`
+
+Run tests
+---------
+
+lint: `npm run lint`
+
+unit test: `npm run unit`
+
+lint & unit: `npm test`
+
 
 Credit
 ------
