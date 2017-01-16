@@ -80,7 +80,7 @@ var klawSync = require('klaw-sync')
 var paths = klawSync('/some/dir', {ignore: '{node_modules,.git}'})
 ```
 
-**ignore `node_modules`, `.git` and all `*.js` files [minimatch](https://github.com/isaacs/minimatch) patterns**
+**ignore `node_modules`, `.git` and all `*.js` files using [minimatch](https://github.com/isaacs/minimatch) patterns**
 
 ```js
 var klawSync = require('klaw-sync')
