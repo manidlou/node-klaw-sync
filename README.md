@@ -73,47 +73,19 @@ var klawSync = require('klaw-sync')
 var paths = klawSync('/some/dir', {ignore: 'node_modules'})
 ```
 
-**ignore `node_modules` and `.git`**
+**ignore `node_modules` and `.git` using [minimatch](https://github.com/isaacs/minimatch) patterns**
 
 ```js
 var klawSync = require('klaw-sync')
 var paths = klawSync('/some/dir', {ignore: '{node_modules,.git}'})
 ```
 
-**ignore `node_modules`, `.git` and all `*.js` files**
+**ignore `node_modules`, `.git` and all `*.js` files [minimatch](https://github.com/isaacs/minimatch) patterns**
 
 ```js
 var klawSync = require('klaw-sync')
 var paths = klawSync('/some/dir', {ignore: ['{node_modules,.git}', '*.js']})
 ```
-
-Performance comparison to other similar modules
------------------------------------------------
-
-Sometimes it's fun to run speed tests on similar functions or modules. The `bm.js` runs some basic [benchmark](https://github.com/bestiejs/benchmark.js) tests for two cases, `without --ignore` (basic usage) and `with --ignore`, on these modules:
-
-- `klaw-sync`
-- [walk-sync](https://github.com/joliss/node-walk-sync)
-- [glob.sync](https://github.com/isaacs/node-glob#globsyncpattern-options)
-- [fs-readdir-recursive](https://github.com/fs-utils/fs-readdir-recursive) (only for basic usage, I am not sure if they support glob patterns)
-
-All of these modules are great pieces of software. I appreciate the authors works. I've personally learned a lot from them.
-
-Just for fun, it turned out for the most cases `klaw-sync` is faster than other modules!
-
-The `bm.js` can be used like:
-
-**_basic usage without ignore_**
-
-`node bm.js <root dir to walk>`
-
-**_with ignore_**
-
-_patterns will be concatenated into an array of patterns_
-
-`node bm.js /some/dir --ignore "{node_modules,.git}"`
-
-`node bm.js /some/dir --ignore "{node_modules,.git}" "*.js"`
 
 Run tests
 ---------
@@ -123,6 +95,43 @@ lint: `npm run lint`
 unit test: `npm run unit`
 
 lint & unit: `npm test`
+
+
+Performance comparison to other similar modules
+-----------------------------------------------
+
+Sometimes it's fun to run speed tests on similar functions or modules. The `bm.js` runs some basic [benchmark](https://github.com/bestiejs/benchmark.js) tests for two cases, `without --ignore` (basic usage) and `with --ignore`, on these modules:
+
+- `klaw-sync`
+- [walk-sync](https://github.com/joliss/node-walk-sync)
+- [glob.sync](https://github.com/isaacs/node-glob#globsyncpattern-options)
+
+All of these modules are great. I appreciate the works. I've personally learned a lot from them.
+
+Just for fun, it turned out for the most cases `klaw-sync` is faster than other modules!
+
+
+#####run benchmark (performance)
+
+**_basic usage without anything to ignore_**
+
+`npm run benchmark -- --dir=/some/dir -p`
+
+**_one item to ignore_**
+
+`npm run benchmark -- --dir=/some/dir -p -i "node_modules"`
+
+**_multiple items to ignore_**
+
+`npm run benchmark -- --dir=/some/dir -p -i "node_modules" -i "*.js"`
+
+#####run benchmark (exec time)
+
+`npm run benchmark -- --dir=/some/dir -t`
+
+`npm run benchmark -- --dir=/some/dir -t -i ".git"`
+
+`npm run benchmark -- --dir=/some/dir -t -i ".git" -i "*.js"`
 
 
 Credit

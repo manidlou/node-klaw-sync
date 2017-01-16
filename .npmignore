@@ -1,6 +1,7 @@
 test/
 appveyor.yml
 bm.js
+npm-debug.log
 .gitignore
 .npmignore
 .travis.yml
