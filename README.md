@@ -113,15 +113,15 @@ Just for fun, it turned out for the most cases `klaw-sync` is faster than other 
 
 #####run benchmark (performance)
 
-**_basic usage without anything to ignore_**
+_basic usage without anything to ignore_
 
 `npm run benchmark -- --dir=/some/dir -p`
 
-**_one item to ignore_**
+_one item to ignore_
 
 `npm run benchmark -- --dir=/some/dir -p -i "node_modules"`
 
-**_multiple items to ignore_**
+_multiple items to ignore_
 
 `npm run benchmark -- --dir=/some/dir -p -i "node_modules" -i "*.js"`
 
