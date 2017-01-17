@@ -2,8 +2,8 @@ Node.js: klaw-sync
 =================
 
 [![npm Package](https://img.shields.io/npm/v/klaw-sync.svg?style=flat-square)](https://www.npmjs.com/package/klaw-sync)
-[![Build Status](https://travis-ci.org/mawni/node-klaw-sync.svg?branch=master)](https://travis-ci.org/mawni/node-klaw-sync)
-[![windows Build status](https://ci.appveyor.com/api/projects/status/braios34k6qw4h5p/branch/master?svg=true)](https://ci.appveyor.com/project/mawni/node-klaw-sync/branch/master)
+[![Build Status](https://travis-ci.org/manidlou/node-klaw-sync.svg?branch=master)](https://travis-ci.org/manidlou/node-klaw-sync)
+[![windows Build status](https://ci.appveyor.com/api/projects/status/braios34k6qw4h5p/branch/master?svg=true)](https://ci.appveyor.com/project/manidlou/node-klaw-sync/branch/master)
 
 <a href="https://github.com/feross/standard"><img src="https://cdn.rawgit.com/feross/standard/master/sticker.svg" alt="Standard JavaScript" width="100"></a>
 
@@ -149,4 +149,3 @@ License
 -------
 
 Licensed under MIT
-

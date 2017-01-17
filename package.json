@@ -5,7 +5,7 @@
   "main": "klaw-sync.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mawni/node-klaw-sync.git"
+    "url": "git+https://github.com/manidlou/node-klaw-sync.git"
   },
   "keywords": [
     "fs",
@@ -18,9 +18,9 @@
   "author": "Mani Maghsoudlou",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mawni/node-klaw-sync/issues"
+    "url": "https://github.com/manidlou/node-klaw-sync/issues"
   },
-  "homepage": "https://github.com/mawni/node-klaw-sync#readme",
+  "homepage": "https://github.com/manidlou/node-klaw-sync#readme",
   "dependencies": {
     "multimatch": "^2.1.0"
   },
