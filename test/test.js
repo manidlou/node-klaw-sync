@@ -4,7 +4,7 @@ var os = require('os')
 var path = require('path')
 var fs = require('fs-extra')
 
-var klawSync = require('../')
+var klawSync = require('../klaw-sync.js')
 
 describe('klaw-sync', function () {
   var TEST_DIR
@@ -14,7 +14,7 @@ describe('klaw-sync', function () {
   var dirnames = ['dir1', 'dir2', 'dir2/dir2_1', 'dir2/dir2_1/dir2_1_1']
   var filenames = ['dir1/file1_2', 'dir2/dir2_1/file2_1_1', 'file1']
 
-  beforeEach(function () {
+  beforeEach(function (done) {
     TEST_DIR = path.join(os.tmpdir(), 'klaw-sync')
     FIXTURES_DIR = path.join(TEST_DIR, 'fixtures')
     fs.emptyDirSync(TEST_DIR)
@@ -30,6 +30,7 @@ describe('klaw-sync', function () {
     FILES.forEach(function (f) {
       fs.ensureFileSync(f)
     })
+    done()
   })
   afterEach(function (done) {
     fs.removeSync(TEST_DIR)
