@@ -100,7 +100,7 @@ lint & unit: `npm test`
 Performance compare to other similar modules
 -----------------------------------------------
 
-Sometimes it's fun to run speed tests on similar functions or modules. The `bm.js` runs some basic [benchmark](https://github.com/bestiejs/benchmark.js) tests for two cases, `without --ignore` (basic usage) and `with --ignore`, on these modules:
+The `bm.js` runs some basic [benchmark](https://github.com/bestiejs/benchmark.js) tests for two cases, `without --ignore` (basic usage) and `with --ignore`, on these modules:
 
 - `klaw-sync`
 - [walk-sync](https://github.com/joliss/node-walk-sync)
