@@ -1,6 +1,6 @@
 'use strict'
 var path = require('path')
-var mm = require('multimatch')
+var mm = require('micromatch')
 var fs
 try {
   fs = require('graceful-fs')
@@ -8,15 +8,15 @@ try {
   fs = require('fs')
 }
 
-function _procPath (dir, file, opts, list) {
+function _procPath (dir, pathItem, opts, list) {
   var nestedPath
   var stat
-  // use string concatenation which is faster than
-  // path.join() and path.resolve()
+  // here since dir already resolved, we use string concatenation
+  // which showed faster performance than path.join() and path.resolve()
   if (path.sep === '/') {
-    nestedPath = dir + '/' + file
+    nestedPath = dir + '/' + pathItem
   } else {
-    nestedPath = dir + '\\' + file
+    nestedPath = dir + '\\' + pathItem
   }
   stat = fs.lstatSync(nestedPath)
   if (stat.isDirectory()) {
@@ -36,6 +36,7 @@ function walkSync (dir, opts, list) {
   var ignore = []
   opts = opts || {}
   list = list || []
+  dir = path.resolve(dir)
   try {
     files = fs.readdirSync(dir)
     if (opts.ignore) {
@@ -45,12 +46,12 @@ function walkSync (dir, opts, list) {
     return er
   }
   files.forEach(function (file) {
-    if (ignore.length <= 0) {
-      _procPath(dir, file, opts, list)
-    } else {
-      if (ignore.indexOf(file) < 0) {
+    if (ignore.length > 0) {
+      if (ignore.indexOf(file) === -1) {
         _procPath(dir, file, opts, list)
       }
+    } else {
+      _procPath(dir, file, opts, list)
     }
   })
   return list

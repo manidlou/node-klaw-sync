@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/manidlou/node-klaw-sync#readme",
   "dependencies": {
-    "multimatch": "^2.1.0"
+    "micromatch": "^2.3.11"
   },
   "devDependencies": {
     "benchmark": "^2.1.3",
@@ -45,6 +45,6 @@
     "lint": "standard",
     "unit": "mocha",
     "test": "npm run lint && npm run unit",
-    "benchmark": "node bm.js"
+    "benchmark": "node ./benchmark/bm.js"
   }
 }

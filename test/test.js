@@ -133,7 +133,7 @@ describe('klaw-sync', function () {
     done()
   })
 
-  it('should ignore if opts.ignore is minimatch pattern', function (done) {
+  it('should ignore if opts.ignore is glob pattern', function (done) {
     var dirToIgnore1 = path.join(FIXTURES_DIR, 'node_modules')
     var dirToIgnore2 = path.join(FIXTURES_DIR, '.git')
     fs.ensureDirSync(dirToIgnore1)
@@ -159,7 +159,7 @@ describe('klaw-sync', function () {
     done()
   })
 
-  it('should ignore if opts.ignore is array', function (done) {
+  it('should ignore if opts.ignore is array of items', function (done) {
     var dirToIgnore1 = path.join(FIXTURES_DIR, 'node_modules')
     var dirToIgnore2 = path.join(FIXTURES_DIR, '.git')
     var fileToIgnore1 = path.join(FIXTURES_DIR, 'dir1', 'somefile.md')
