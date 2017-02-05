@@ -1,6 +1,6 @@
 test/
+benchmark/
 appveyor.yml
-bm.js
 npm-debug.log
 .gitignore
 .npmignore
