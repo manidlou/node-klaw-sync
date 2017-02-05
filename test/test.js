@@ -42,7 +42,6 @@ describe('klaw-sync', function () {
       klawSync('dirDoesNotExist/')
     } catch (err) {
       assert.equal(err.code, 'ENOENT')
-    } finally {
       done()
     }
   })
@@ -52,7 +51,6 @@ describe('klaw-sync', function () {
       klawSync(FILES[0])
     } catch (err) {
       assert.equal(err.code, 'ENOTDIR')
-    } finally {
       done()
     }
   })

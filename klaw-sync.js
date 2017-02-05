@@ -43,7 +43,7 @@ function walkSync (dir, opts, list) {
       ignore = mm(files, opts.ignore)
     }
   } catch (er) {
-    return er
+    throw er
   }
   files.forEach(function (file) {
     if (ignore.length > 0) {
