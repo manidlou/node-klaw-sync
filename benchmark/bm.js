@@ -53,7 +53,7 @@ function perf (root, ign) {
       console.log(String(ev.target))
     }).on('complete', function () {
       console.log('\nSummary: Fastest is ' + this.filter('fastest').map('name'))
-    }).run({ 'async': true })
+    }).run({ 'async': false })
   }
 }
 
