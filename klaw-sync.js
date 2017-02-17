@@ -45,15 +45,15 @@ function walkSync (dir, opts, list) {
   } catch (er) {
     throw er
   }
-  files.forEach(function (file) {
+
+  for (var i = 0; i < files.length; i += 1) {
+    var file = files[i]
     if (ignore.length > 0) {
-      if (ignore.indexOf(file) === -1) {
-        _procPath(dir, file, opts, list)
-      }
+      if (ignore.indexOf(file) === -1) _procPath(dir, file, opts, list)
     } else {
       _procPath(dir, file, opts, list)
     }
-  })
+  }
   return list
 }
 

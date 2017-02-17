@@ -1,3 +1,8 @@
+1.1.2 / 2017-02-17
+------------------
+
+- Changed to traditional for loop instead of using Array.forEach() because of better performance.
+
 1.1.1 / 2017-02-05
 ------------------
 
