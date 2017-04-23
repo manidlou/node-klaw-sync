@@ -29,3 +29,5 @@
 
 - initial release
 
+[#1]: https://github.com/manidlou/node-klaw-sync/issues/1 "loading all files with certain name"
+

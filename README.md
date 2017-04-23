@@ -23,7 +23,7 @@ Usage
 - `options` `<Object>` *optional* (all options are `false` by default)
   - `nodir` `<Boolean>` return only files (ignore directories)
   - `nofile` `<Boolean>` return only directories (ignore files)
-  - `noRecurseOnFilter` `<Boolean>` the default behavior is to read all directories even though they don't pass the `filter` function (won't be included but still will be traversed). Set `true` to prevent unnecessary traversal of unwanted directories
+  - `noRecurseOnFilter` `<Boolean>` when `filter` function is used, the default behavior is to read all directories even though they don't pass the `filter` function (won't be included but still will be traversed). Set `true` to prevent unnecessary traversal of unwanted directories
   - `filter` `<Function>` function that gets one argument `fn({path: '', stats: {}})` and returns true to include or false to exclude the item
 
 - return: `<Array<Object>>` `[{path: '', stats: {}}]`
@@ -33,6 +33,7 @@ Examples
 
 ```js
 const klawSync = require('klaw-sync')
+
 const paths = klawSync('/some/dir')
 // paths = [{path: '/some/dir/dir1', stats: {}}, {path: '/some/dir/file1', stats: {}}]
 ```
@@ -55,6 +56,7 @@ _**files only**_
 
 ```js
 const klawSync = require('klaw-sync')
+
 const files = klawSync('/some/dir', {nodir: true})
 // files = [{path: '/some/dir/file1', stats: {}}, {path: '/some/dir/file2', stats: {}}]
 ```
@@ -63,6 +65,7 @@ _**directories only**_
 
 ```js
 const klawSync = require('klaw-sync')
+
 const dirs = klawSync('/some/dir', {nofile: true})
 // dirs = [{path: '/some/dir/dir1', stats: {}}, {path: '/some/dir/dir2', stats: {}}]
 ```
@@ -107,8 +110,8 @@ Again here `noRecurseOnFilter` is not required since we still want to read all d
 const klawSync = require('klaw-sync')
 
 const refTime = new Date(2017, 3, 24).getTime()
+const filterFn = item => item.stats.mtime.getTime() > refTime
 
-const filterFn = item => item.stats.mtime > refTime
 const paths = klawSync('/some/dir', { filter: filterFn })
 ```
 
@@ -131,7 +134,7 @@ The `bm.js` runs some basic [benchmark](https://github.com/bestiejs/benchmark.js
 - [walk-sync](https://github.com/joliss/node-walk-sync)
 - [glob.sync](https://github.com/isaacs/node-glob#globsyncpattern-options)
 
-Just for fun, it turned out (as of January 25, 2017) for the most cases `klaw-sync` is faster than other modules!
+It turned out (as of January 25, 2017) for the most cases `klaw-sync` is faster than other modules!
 
 ##### run benchmark
 
