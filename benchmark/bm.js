@@ -12,7 +12,7 @@ function help () {
   console.log(`npm run benchmark -- --dir=<rootdir> --nodir=true (ignore all directories)`)
 }
 
-function run (root, opts) {
+function runBm (root, opts) {
   if (!opts) {
     const suite = Benchmark.Suite()
     suite.add('walk-sync', function () {
@@ -31,8 +31,8 @@ function run (root, opts) {
     }).on('cycle', function (ev) {
       console.log(String(ev.target))
     }).on('complete', function () {
-      console.log('\nSummary: Fastest is ' + this.filter('fastest').map('name'))
-    }).run({ 'async': false })
+      console.log('Fastest is ' + this.filter('fastest').map('name'))
+    }).run()
   } else {
     const suite = Benchmark.Suite()
     suite.add('walk-sync', function () {
@@ -52,8 +52,8 @@ function run (root, opts) {
     }).on('cycle', function (ev) {
       console.log(String(ev.target))
     }).on('complete', function () {
-      console.log('\nSummary: Fastest is ' + this.filter('fastest').map('name'))
-    }).run({ 'async': false })
+      console.log('Fastest is ' + this.filter('fastest').map('name'))
+    }).run()
   }
 }
 
@@ -66,9 +66,9 @@ if (!argv.dir) {
   if (argv.nodir) {
     console.log(`root dir: ${dir}`)
     console.log('option.nodir: true\n')
-    run(dir, {nodir: true})
+    runBm(dir, {nodir: true})
   } else {
     console.log(`root dir: ${dir}\n`)
-    run(dir)
+    runBm(dir)
   }
 }

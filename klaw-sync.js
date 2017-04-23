@@ -12,27 +12,22 @@ function klawSync (dir, opts, ls) {
     const stat = fs.lstatSync(pathItem)
     const item = {path: pathItem, stats: stat}
     if (stat.isDirectory()) {
-      if (!opts.nodir) {
-        if (opts.filter) {
-          if (opts.filter(item)) {
-            ls.push(item)
-            ls = klawSync(pathItem, opts, ls)
-          }
-          if (!opts.noRecurseOnFilter) ls = klawSync(pathItem, opts, ls)
-        } else {
+      if (opts.filter) {
+        if (opts.filter(item)) {
           ls.push(item)
           ls = klawSync(pathItem, opts, ls)
+        } else {
+          if (!opts.noRecurseOnFailedFilter) ls = klawSync(pathItem, opts, ls)
         }
       } else {
+        if (!opts.nodir) ls.push(item)
         ls = klawSync(pathItem, opts, ls)
       }
     } else {
-      if (!opts.nofile) {
-        if (opts.filter) {
-          if (opts.filter(item)) ls.push(item)
-        } else {
-          ls.push(item)
-        }
+      if (opts.filter) {
+        if (opts.filter(item)) ls.push(item)
+      } else {
+        if (!opts.nofile) ls.push(item)
       }
     }
   }

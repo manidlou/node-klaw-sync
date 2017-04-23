@@ -6,7 +6,7 @@
 
 ### Added
 - `filter` option. A function that gets one argument `fn({path: '', stats: {}})` and returns true to include or false to exclude the item.
-- `noRecurseOnFilter` option to prevent unnecessary traversal of unwanted directories when `filter` function is used.
+- `noRecurseOnFailedFilter` option to prevent unnecessary traversal of unwanted directories when `filter` function is used.
 
 1.1.2 / 2017-02-17
 ------------------
