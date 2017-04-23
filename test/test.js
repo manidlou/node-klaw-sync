@@ -87,96 +87,6 @@ describe('klaw-sync', () => {
       assert.deepEqual(dir.stats, dirsOnly[i].stats)
     })
   })
-  /*
-  it('should ignore if opts.ignore is path name', () => {
-    const dirToIgnore = path.join(TEST_DIR, 'node_modules')
-    fs.ensureDirSync(dirToIgnore)
-    const paths = [
-      {path: DIRS[0], stats: fs.statSync(DIRS[0])},
-      {path: FILES[0], stats: fs.statSync(FILES[0])},
-      {path: DIRS[1], stats: fs.statSync(DIRS[1])},
-      {path: DIRS[2], stats: fs.statSync(DIRS[2])},
-      {path: DIRS[3], stats: fs.statSync(DIRS[3])},
-      {path: FILES[1], stats: fs.statSync(FILES[1])},
-      {path: FILES[2], stats: fs.statSync(FILES[2])}
-    ]
-    const items = klawSync(TEST_DIR, {ignore: 'node_modules'})
-    assert.equal(items.length, paths.length)
-    items.forEach((p, i) => {
-      assert.deepEqual(p, paths[i])
-      assert.strictEqual(p.path, paths[i].path)
-      assert.deepEqual(p.stats, paths[i].stats)
-    })
-  })
-
-  it('should ignore if opts.ignore is glob pattern', () => {
-    const dirToIgnore1 = path.join(TEST_DIR, 'node_modules')
-    const dirToIgnore2 = path.join(TEST_DIR, '.git')
-    fs.ensureDirSync(dirToIgnore1)
-    fs.ensureDirSync(dirToIgnore2)
-    const paths = [
-      {path: DIRS[0], stats: fs.statSync(DIRS[0])},
-      {path: FILES[0], stats: fs.statSync(FILES[0])},
-      {path: DIRS[1], stats: fs.statSync(DIRS[1])},
-      {path: DIRS[2], stats: fs.statSync(DIRS[2])},
-      {path: DIRS[3], stats: fs.statSync(DIRS[3])},
-      {path: FILES[1], stats: fs.statSync(FILES[1])},
-      {path: FILES[2], stats: fs.statSync(FILES[2])}
-    ]
-    const items = klawSync(TEST_DIR, {ignore: '{node_modules,.git}'})
-    assert.equal(items.length, paths.length)
-    items.forEach((p, i) => {
-      assert.deepEqual(p, paths[i])
-      assert.strictEqual(p.path, paths[i].path)
-      assert.deepEqual(p.stats, paths[i].stats)
-    })
-  })
-
-  it('should ignore if opts.ignore is array of patterns', () => {
-    const dirToIgnore1 = path.join(TEST_DIR, 'node_modules')
-    const dirToIgnore2 = path.join(TEST_DIR, '.git')
-    const fileToIgnore1 = path.join(TEST_DIR, 'dir1', 'somefile.md')
-    const fileToIgnore2 = path.join(TEST_DIR, 'dir2', 'dir2_1', 'someotherfile.md')
-    fs.ensureDirSync(dirToIgnore1)
-    fs.ensureDirSync(dirToIgnore2)
-    fs.ensureFileSync(fileToIgnore1)
-    fs.ensureFileSync(fileToIgnore2)
-    const paths = [
-      {path: DIRS[0], stats: fs.statSync(DIRS[0])},
-      {path: FILES[0], stats: fs.statSync(FILES[0])},
-      {path: DIRS[1], stats: fs.statSync(DIRS[1])},
-      {path: DIRS[2], stats: fs.statSync(DIRS[2])},
-      {path: DIRS[3], stats: fs.statSync(DIRS[3])},
-      {path: FILES[1], stats: fs.statSync(FILES[1])},
-      {path: FILES[2], stats: fs.statSync(FILES[2])}
-    ]
-    const items = klawSync(TEST_DIR, {ignore: ['node_modules', '.git', '.md']})
-    assert.equal(items.length, paths.length)
-    items.forEach((p, i) => {
-      assert.deepEqual(p, paths[i])
-      assert.strictEqual(p.path, paths[i].path)
-      assert.deepEqual(p.stats, paths[i].stats)
-    })
-  })
-
-  it('should ignore if opts.ignore is glob pattern with negation', () => {
-    const f1 = path.join(TEST_DIR, 'dir1', 'foo.js')
-    const f2 = path.join(TEST_DIR, 'dir2', 'dir2_1', 'bar.js')
-    fs.ensureFileSync(f1)
-    fs.ensureFileSync(f2)
-    const paths = [
-      {path: f1, stats: fs.statSync(f1)},
-      {path: f2, stats: fs.statSync(f2)}
-    ]
-    const items = klawSync(TEST_DIR, {ignore: '.js'})
-    assert.equal(items.length, paths.length)
-    items.forEach((p, i) => {
-      assert.deepEqual(p, paths[i])
-      assert.strictEqual(p.path, paths[i].path)
-      assert.deepEqual(p.stats, paths[i].stats)
-    })
-  })
-  */
 
   describe('when opts.filter is true', () => {
     it('should filter based on path', () => {
@@ -250,6 +160,30 @@ describe('klaw-sync', () => {
         {path: FILES[2], stats: fs.statSync(FILES[2])}
       ]
       const filterFunc = i => i.path.indexOf('node_modules') < 0
+      const items = klawSync(TEST_DIR, {filter: filterFunc, noRecursiveOnFilter: true})
+      assert.equal(items.length, paths.length)
+      items.forEach((p, i) => {
+        assert.deepEqual(p, paths[i])
+        assert.strictEqual(p.path, paths[i].path)
+        assert.deepEqual(p.stats, paths[i].stats)
+      })
+    })
+
+    it('should filter when it is used to ignore items', () => {
+      const dirToIgnore1 = path.join(TEST_DIR, 'node_modules')
+      const dirToIgnore2 = path.join(TEST_DIR, '.git')
+      fs.ensureDirSync(dirToIgnore1)
+      fs.ensureDirSync(dirToIgnore2)
+      const paths = [
+        {path: DIRS[0], stats: fs.statSync(DIRS[0])},
+        {path: FILES[0], stats: fs.statSync(FILES[0])},
+        {path: DIRS[1], stats: fs.statSync(DIRS[1])},
+        {path: DIRS[2], stats: fs.statSync(DIRS[2])},
+        {path: DIRS[3], stats: fs.statSync(DIRS[3])},
+        {path: FILES[1], stats: fs.statSync(FILES[1])},
+        {path: FILES[2], stats: fs.statSync(FILES[2])}
+      ]
+      const filterFunc = i => i.path.indexOf('node_modules') < 0 && i.path.indexOf('.git') < 0
       const items = klawSync(TEST_DIR, {filter: filterFunc, noRecursiveOnFilter: true})
       assert.equal(items.length, paths.length)
       items.forEach((p, i) => {
