@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/manidlou/node-klaw-sync#readme",
   "dependencies": {
+    "benchmark": "^2.1.4",
     "micromatch": "^2.3.11"
   },
   "devDependencies": {

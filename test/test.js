@@ -87,7 +87,7 @@ describe('klaw-sync', () => {
       assert.deepEqual(dir.stats, dirsOnly[i].stats)
     })
   })
-
+  /*
   it('should ignore if opts.ignore is path name', () => {
     const dirToIgnore = path.join(TEST_DIR, 'node_modules')
     fs.ensureDirSync(dirToIgnore)
@@ -100,7 +100,7 @@ describe('klaw-sync', () => {
       {path: FILES[1], stats: fs.statSync(FILES[1])},
       {path: FILES[2], stats: fs.statSync(FILES[2])}
     ]
-    const items = klawSync(TEST_DIR, {ignore: '**/node_modules'})
+    const items = klawSync(TEST_DIR, {ignore: 'node_modules'})
     assert.equal(items.length, paths.length)
     items.forEach((p, i) => {
       assert.deepEqual(p, paths[i])
@@ -123,7 +123,7 @@ describe('klaw-sync', () => {
       {path: FILES[1], stats: fs.statSync(FILES[1])},
       {path: FILES[2], stats: fs.statSync(FILES[2])}
     ]
-    const items = klawSync(TEST_DIR, {ignore: '{**/node_modules,**/.git}'})
+    const items = klawSync(TEST_DIR, {ignore: '{node_modules,.git}'})
     assert.equal(items.length, paths.length)
     items.forEach((p, i) => {
       assert.deepEqual(p, paths[i])
@@ -150,7 +150,7 @@ describe('klaw-sync', () => {
       {path: FILES[1], stats: fs.statSync(FILES[1])},
       {path: FILES[2], stats: fs.statSync(FILES[2])}
     ]
-    const items = klawSync(TEST_DIR, {ignore: ['**/node_modules', '**/.git', '**/*.md']})
+    const items = klawSync(TEST_DIR, {ignore: ['node_modules', '.git', '.md']})
     assert.equal(items.length, paths.length)
     items.forEach((p, i) => {
       assert.deepEqual(p, paths[i])
@@ -168,7 +168,7 @@ describe('klaw-sync', () => {
       {path: f1, stats: fs.statSync(f1)},
       {path: f2, stats: fs.statSync(f2)}
     ]
-    const items = klawSync(TEST_DIR, {ignore: '!**/*.js'})
+    const items = klawSync(TEST_DIR, {ignore: '.js'})
     assert.equal(items.length, paths.length)
     items.forEach((p, i) => {
       assert.deepEqual(p, paths[i])
@@ -176,61 +176,87 @@ describe('klaw-sync', () => {
       assert.deepEqual(p.stats, paths[i].stats)
     })
   })
+  */
 
-  it('should filter if opts.filter is true based on path', () => {
-    const f1 = path.join(TEST_DIR, 'dir1', 'foo.js')
-    const f2 = path.join(TEST_DIR, 'dir2', 'dir2_1', 'bar.js')
-    fs.ensureFileSync(f1)
-    fs.ensureFileSync(f2)
-    const paths = [
-      {path: f1, stats: fs.statSync(f1)},
-      {path: f2, stats: fs.statSync(f2)}
-    ]
-    const filterFunc = (i) => path.extname(i.path) === '.js'
-    const items = klawSync(TEST_DIR, {filter: filterFunc})
-    assert.equal(items.length, paths.length)
-    items.forEach((p, i) => {
-      assert.deepEqual(p, paths[i])
-      assert.strictEqual(p.path, paths[i].path)
-      assert.deepEqual(p.stats, paths[i].stats)
+  describe('when opts.filter is true', () => {
+    it('should filter based on path', () => {
+      const f1 = path.join(TEST_DIR, 'dir1', 'foo.js')
+      const f2 = path.join(TEST_DIR, 'dir2', 'dir2_1', 'bar.js')
+      fs.ensureFileSync(f1)
+      fs.ensureFileSync(f2)
+      const paths = [
+        {path: f1, stats: fs.statSync(f1)},
+        {path: f2, stats: fs.statSync(f2)}
+      ]
+      const filterFunc = (i) => path.extname(i.path) === '.js'
+      const items = klawSync(TEST_DIR, {filter: filterFunc})
+      assert.equal(items.length, paths.length)
+      items.forEach((p, i) => {
+        assert.deepEqual(p, paths[i])
+        assert.strictEqual(p.path, paths[i].path)
+        assert.deepEqual(p.stats, paths[i].stats)
+      })
     })
-  })
 
-  it('should filter if opts.filter is true based on stats', () => {
-    const f1 = path.join(TEST_DIR, 'dir1', 'foo.js')
-    const f2 = path.join(TEST_DIR, 'dir2', 'dir2_1', 'bar.js')
-    fs.outputFileSync(f1, 'test file 1 contents')
-    fs.outputFileSync(f2, 'test file 2 contents')
-    const paths = [
-      {path: f1, stats: fs.statSync(f1)},
-      {path: f2, stats: fs.statSync(f2)}
-    ]
-    const filterFunc = (i) => i.stats.isFile() && i.stats.size > 0
-    const items = klawSync(TEST_DIR, {filter: filterFunc})
-    assert.equal(items.length, paths.length)
-    items.forEach((p, i) => {
-      assert.deepEqual(p, paths[i])
-      assert.strictEqual(p.path, paths[i].path)
-      assert.deepEqual(p.stats, paths[i].stats)
+    it('should filter based on stats', () => {
+      const f1 = path.join(TEST_DIR, 'dir1', 'foo.js')
+      const f2 = path.join(TEST_DIR, 'dir2', 'dir2_1', 'bar.js')
+      fs.outputFileSync(f1, 'test file 1 contents')
+      fs.outputFileSync(f2, 'test file 2 contents')
+      const paths = [
+        {path: f1, stats: fs.statSync(f1)},
+        {path: f2, stats: fs.statSync(f2)}
+      ]
+      const filterFunc = (i) => i.stats.isFile() && i.stats.size > 0
+      const items = klawSync(TEST_DIR, {filter: filterFunc})
+      assert.equal(items.length, paths.length)
+      items.forEach((p, i) => {
+        assert.deepEqual(p, paths[i])
+        assert.strictEqual(p.path, paths[i].path)
+        assert.deepEqual(p.stats, paths[i].stats)
+      })
     })
-  })
 
-  it('should filter if opts.filter is true based on both path and stats', () => {
-    const f1 = path.join(TEST_DIR, 'dir1', 'foo.js')
-    const f2 = path.join(TEST_DIR, 'dir2', 'dir2_1', 'bar.js')
-    fs.outputFileSync(f1, 'test file 1 contents')
-    fs.outputFileSync(f2, 'test file 2 contents')
-    const paths = [
-      {path: f1, stats: fs.statSync(f1)},
-      {path: f2, stats: fs.statSync(f2)}
-    ]
-    const filterFunc = (i) => path.extname(i.path) === '.js' && i.stats.size > 0
-    const items = klawSync(TEST_DIR, {filter: filterFunc})
-    assert.equal(items.length, paths.length)
-    items.forEach((p, i) => {
-      assert.deepEqual(p, paths[i])
-      assert.strictEqual(p.path, paths[i].path)
-      assert.deepEqual(p.stats, paths[i].stats)
+    it('should filter based on both path and stats', () => {
+      const f1 = path.join(TEST_DIR, 'dir1', 'foo.js')
+      const f2 = path.join(TEST_DIR, 'dir2', 'dir2_1', 'bar.js')
+      fs.outputFileSync(f1, 'test file 1 contents')
+      fs.outputFileSync(f2, 'test file 2 contents')
+      const paths = [
+        {path: f1, stats: fs.statSync(f1)},
+        {path: f2, stats: fs.statSync(f2)}
+      ]
+      const filterFunc = (i) => path.extname(i.path) === '.js' && i.stats.size > 0
+      const items = klawSync(TEST_DIR, {filter: filterFunc})
+      assert.equal(items.length, paths.length)
+      items.forEach((p, i) => {
+        assert.deepEqual(p, paths[i])
+        assert.strictEqual(p.path, paths[i].path)
+        assert.deepEqual(p.stats, paths[i].stats)
+      })
+    })
+
+    it('should filter but not recurse if noRecursiveOnFilter is true', () => {
+      const dirToIgnore1 = path.join(TEST_DIR, 'node_modules')
+      const dirToIgnore2 = path.join(dirToIgnore1, 'somepkg')
+      fs.ensureDirSync(dirToIgnore2)
+      const paths = [
+        {path: DIRS[0], stats: fs.statSync(DIRS[0])},
+        {path: FILES[0], stats: fs.statSync(FILES[0])},
+        {path: DIRS[1], stats: fs.statSync(DIRS[1])},
+        {path: DIRS[2], stats: fs.statSync(DIRS[2])},
+        {path: DIRS[3], stats: fs.statSync(DIRS[3])},
+        {path: FILES[1], stats: fs.statSync(FILES[1])},
+        {path: FILES[2], stats: fs.statSync(FILES[2])}
+      ]
+      const filterFunc = i => i.path.indexOf('node_modules') < 0
+      const items = klawSync(TEST_DIR, {filter: filterFunc, noRecursiveOnFilter: true})
+      assert.equal(items.length, paths.length)
+      items.forEach((p, i) => {
+        assert.deepEqual(p, paths[i])
+        assert.strictEqual(p.path, paths[i].path)
+        assert.deepEqual(p.stats, paths[i].stats)
+      })
     })
   })
 })

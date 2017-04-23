@@ -8,34 +8,13 @@ const klawSync = require('../klaw-sync.js')
 
 function help () {
   console.log(`Usage examples:\n`)
-  console.log(`npm run benchmark -- --dir=<rootdir> (basic usage without anything to ignore)`)
-  console.log(`npm run benchmark -- --dir=<rootdir> -i "{node_modules,.git}" (ignore node_modules and .git directories)`)
-  console.log(`npm run benchmark -- --dir=<rootdir> -i "node_modules" -i "*.js" (ignore node_modules and all js files)`)
+  console.log(`npm run benchmark -- --dir=<rootdir>`)
+  console.log(`npm run benchmark -- --dir=<rootdir> --nodir=true (ignore all directories)`)
 }
 
-function perf (root, ign) {
-  var suite = Benchmark.Suite()
-  if (ign) {
-    suite.add('walk-sync', function () {
-      walkSync(root, {ignore: ign})
-    }).add('glob.sync', function () {
-      globSync('**', {
-        cwd: root,
-        dot: true,
-        mark: true,
-        strict: true,
-        ignore: ign
-      })
-    }).add('klaw-sync', function () {
-      klawSync(root, {ignore: ign})
-    }).on('error', function (er) {
-      return er
-    }).on('cycle', function (ev) {
-      console.log(String(ev.target))
-    }).on('complete', function () {
-      console.log('\nSummary: Fastest is ' + this.filter('fastest').map('name'))
-    }).run({ 'async': false })
-  } else {
+function run (root, opts) {
+  if (!opts) {
+    const suite = Benchmark.Suite()
     suite.add('walk-sync', function () {
       walkSync(root)
     }).add('glob.sync', function () {
@@ -54,31 +33,42 @@ function perf (root, ign) {
     }).on('complete', function () {
       console.log('\nSummary: Fastest is ' + this.filter('fastest').map('name'))
     }).run({ 'async': false })
+  } else {
+    const suite = Benchmark.Suite()
+    suite.add('walk-sync', function () {
+      walkSync(root, {directories: false})
+    }).add('glob.sync', function () {
+      globSync('**', {
+        cwd: root,
+        dot: true,
+        mark: true,
+        strict: true,
+        nodir: true
+      })
+    }).add('klaw-sync', function () {
+      klawSync(root, {nodir: true})
+    }).on('error', function (er) {
+      return er
+    }).on('cycle', function (ev) {
+      console.log(String(ev.target))
+    }).on('complete', function () {
+      console.log('\nSummary: Fastest is ' + this.filter('fastest').map('name'))
+    }).run({ 'async': false })
   }
 }
 
-try {
-  if (!argv.dir) {
-    console.log('err: root dir must be specified.')
-    help()
-    process.exit(1)
-  }
-  var dir = path.resolve(argv.dir)
-  console.log('Running benchmark tests...\n')
-  console.log('root dir: ', argv.dir)
-  if (argv.i) {
-    process.stdout.write('ignore: ')
-    console.dir(argv.i)
-    console.log()
-    // convert ignore args to array
-    if (typeof argv.i === 'string') {
-      perf(dir, [argv.i])
-    } else {
-      perf(dir, argv.i)
-    }
+if (!argv.dir) {
+  console.log('err: root dir cannot be null.')
+  help()
+} else {
+  const dir = path.resolve(argv.dir)
+  console.log('Running benchmark tests..')
+  if (argv.nodir) {
+    console.log(`root dir: ${dir}`)
+    console.log('option.nodir: true\n')
+    run(dir, {nodir: true})
   } else {
-    perf(dir)
+    console.log(`root dir: ${dir}\n`)
+    run(dir)
   }
-} catch (er) {
-  throw er
 }

@@ -1,6 +1,5 @@
 'use strict'
 const path = require('path')
-const mm = require('micromatch')
 let fs
 try {
   fs = require('graceful-fs')
@@ -14,20 +13,22 @@ function klawSync (dir, opts, ls) {
     const item = {path: pathItem, stats: stat}
     if (stat.isDirectory()) {
       if (!opts.nodir) {
-        if (opts.ignore) {
-          if (mm(pathItem, opts.ignore).length === 0) ls.push(item)
-        } else if (opts.filter) {
-          if (opts.filter(item)) ls.push(item)
+        if (opts.filter) {
+          if (opts.filter(item)) {
+            ls.push(item)
+            ls = klawSync(pathItem, opts, ls)
+          }
+          if (!opts.noRecursiveOnFilter) ls = klawSync(pathItem, opts, ls)
         } else {
           ls.push(item)
+          ls = klawSync(pathItem, opts, ls)
         }
+      } else {
+        ls = klawSync(pathItem, opts, ls)
       }
-      ls = klawSync(pathItem, opts, ls)
     } else {
       if (!opts.nofile) {
-        if (opts.ignore) {
-          if (mm(pathItem, opts.ignore).length === 0) ls.push(item)
-        } else if (opts.filter) {
+        if (opts.filter) {
           if (opts.filter(item)) ls.push(item)
         } else {
           ls.push(item)
