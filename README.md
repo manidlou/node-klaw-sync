@@ -30,7 +30,7 @@ Usage
   - `filter` `<Function>`
     - function that gets one argument `fn({path: '', stats: {}})` and returns true to include or false to exclude the item
 
-- return: `<Array<Object>>` `[{path: '', stats: {}}]`
+- **Return:** `<Array<Object>>` `[{path: '', stats: {}}]`
 
 Examples
 --------
