@@ -9,10 +9,6 @@ node-klaw-sync
 
 `klaw-sync` is a Node.js recursive file system walker, which is the synchronous counterpart of [klaw](https://github.com/jprichardson/node-klaw). It lists all files and directories inside a directory recursively and returns an array of objects that each object has two properties: `path` and `stats`. `path` is the full path of the file or directory and `stats` is an instance of [fs.Stats](https://nodejs.org/api/fs.html#fs_class_fs_stats).
 
-Breaking Change
----------------
-`ignore` option is no longer supported (as of `v2.0.0`). Instead, you can use `filter` option to achieve the same functionality. Please see [examples](#examples).
-
 Install
 -------
 
@@ -27,7 +23,7 @@ Usage
 - `options` `<Object>` *optional* (all options are `false` by default)
   - `nodir` `<Boolean>` return only files (ignore directories)
   - `nofile` `<Boolean>` return only directories (ignore files)
-  - `noRecursiveOnFilter` `<Boolean>` if your `filter` function applies to **directories only**, set `true` to prevent unnecessary traversal of unwanted directories
+  - `noRecurseOnFilter` `<Boolean>` the default behavior is to read all directories even though they don't pass the `filter` function (won't be included but still will be traversed). Set `true` to prevent unnecessary traversal of unwanted directories
   - `filter` `<Function>` function that gets one argument `fn({path: '', stats: {}})` and returns true to include or false to exclude the item
 
 - return: `<Array<Object>>` `[{path: '', stats: {}}]`
@@ -73,13 +69,13 @@ const dirs = klawSync('/some/dir', {nofile: true})
 
 _**ignore `node_modules`**_
 
-Notice here because the `filter` function is applied to directories only, `noRecursiveOnFilter: true` is used since we don't want anything from `node_modules` in this case.
+Notice here `noRecurseOnFilter: true` is used since we don't want anything from `node_modules` in this case (no inclusion and no traversal).
 
 ```js
 const klawSync = require('klaw-sync')
 
 const filterFn = item => item.path.indexOf('node_modules') < 0
-const paths = klawSync('/some/dir', { filter: filterFn, noRecursiveOnFilter: true })
+const paths = klawSync('/some/dir', { filter: filterFn, noRecurseOnFilter: true })
 ```
 
 _**ignore `node_modules` and `.git`**_
@@ -88,17 +84,31 @@ _**ignore `node_modules` and `.git`**_
 const klawSync = require('klaw-sync')
 
 const filterFn = item => item.path.indexOf('node_modules') < 0 && item.path.indexOf('.git') < 0
-const paths = klawSync('/some/dir', { filter: filterFn, noRecursiveOnFilter: true })
+const paths = klawSync('/some/dir', { filter: filterFn, noRecurseOnFilter: true })
 ```
 
 _**get all `js` files**_
 
-Notice here `noRecursiveOnFilter` is not required since we are interested in all `js` files. In other words, although the `filter` function doesn't pass for directories, we still want to read them and see if they have any `js` files.
+Here `noRecurseOnFilter` is not required since we are interested in all `js` files. In other words, although no directories pass the `filter` function, we still want to read them and see if they have any `js` files.
+
+```js
+const path = require('path')
+const klawSync = require('klaw-sync')
+
+const filterFn = item => path.extname(item.path) === '.js'
+const paths = klawSync('/some/dir', { filter: filterFn })
+```
+
+_**filter based on stats**_
+
+Again here `noRecurseOnFilter` is not required since we still want to read all directories even though they don't pass the `filter` function, to see if their contents pass the `filter` function.
 
 ```js
 const klawSync = require('klaw-sync')
 
-const filterFn = item => path.extname(item.path) === '.js'
+const refTime = new Date(2017, 3, 24).getTime()
+
+const filterFn = item => item.stats.mtime > refTime
 const paths = klawSync('/some/dir', { filter: filterFn })
 ```
 

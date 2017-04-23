@@ -18,7 +18,7 @@ function klawSync (dir, opts, ls) {
             ls.push(item)
             ls = klawSync(pathItem, opts, ls)
           }
-          if (!opts.noRecursiveOnFilter) ls = klawSync(pathItem, opts, ls)
+          if (!opts.noRecurseOnFilter) ls = klawSync(pathItem, opts, ls)
         } else {
           ls.push(item)
           ls = klawSync(pathItem, opts, ls)

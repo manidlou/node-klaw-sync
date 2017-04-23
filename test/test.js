@@ -146,7 +146,7 @@ describe('klaw-sync', () => {
       })
     })
 
-    it('should filter but not recurse if noRecursiveOnFilter is true', () => {
+    it('should filter but not recurse if noRecurseOnFilter is true', () => {
       const dirToIgnore1 = path.join(TEST_DIR, 'node_modules')
       const dirToIgnore2 = path.join(dirToIgnore1, 'somepkg')
       fs.ensureDirSync(dirToIgnore2)
@@ -160,7 +160,7 @@ describe('klaw-sync', () => {
         {path: FILES[2], stats: fs.statSync(FILES[2])}
       ]
       const filterFunc = i => i.path.indexOf('node_modules') < 0
-      const items = klawSync(TEST_DIR, {filter: filterFunc, noRecursiveOnFilter: true})
+      const items = klawSync(TEST_DIR, {filter: filterFunc, noRecurseOnFilter: true})
       assert.equal(items.length, paths.length)
       items.forEach((p, i) => {
         assert.deepEqual(p, paths[i])
@@ -184,7 +184,7 @@ describe('klaw-sync', () => {
         {path: FILES[2], stats: fs.statSync(FILES[2])}
       ]
       const filterFunc = i => i.path.indexOf('node_modules') < 0 && i.path.indexOf('.git') < 0
-      const items = klawSync(TEST_DIR, {filter: filterFunc, noRecursiveOnFilter: true})
+      const items = klawSync(TEST_DIR, {filter: filterFunc, noRecurseOnFilter: true})
       assert.equal(items.length, paths.length)
       items.forEach((p, i) => {
         assert.deepEqual(p, paths[i])
