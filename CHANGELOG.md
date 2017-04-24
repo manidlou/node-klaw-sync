@@ -2,7 +2,7 @@
 ------------------
 
 ### Removed
-- **BREAKING:** Removed support for `ignore` option due to inconsistency in glob pattern usages and relatively poor performance. See: [#1]
+- **BREAKING:** Removed support for `ignore` option. Instead, `filter` option can be used. See: [#1]
 
 ### Added
 - `filter` option. A function that gets one argument `fn({path: '', stats: {}})` and returns true to include or false to exclude the item.
