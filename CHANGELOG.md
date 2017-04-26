@@ -1,3 +1,9 @@
+2.1.0 / 2017-04-25
+------------------
+
+### Fixed
+- Apply `opts.nodir` and `opts.nofile` when `filter` option is used.
+
 2.0.0 / 2017-04-23
 ------------------
 
