@@ -13,7 +13,7 @@ function klawSync (dir, opts, ls) {
     const item = {path: pathItem, stats: stat}
     if (stat.isDirectory()) {
       if (opts.filter) {
-        if (opts.filter(item)) {
+        if (opts.filter(item) && !opts.nodir) {
           ls.push(item)
           ls = klawSync(pathItem, opts, ls)
         } else {
@@ -25,7 +25,7 @@ function klawSync (dir, opts, ls) {
       }
     } else {
       if (opts.filter) {
-        if (opts.filter(item)) ls.push(item)
+        if (opts.filter(item) && !opts.nofile) ls.push(item)
       } else {
         if (!opts.nofile) ls.push(item)
       }
