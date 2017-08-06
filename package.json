@@ -21,17 +21,17 @@
     "url": "https://github.com/manidlou/node-klaw-sync/issues"
   },
   "homepage": "https://github.com/manidlou/node-klaw-sync#readme",
+  "dependencies": {
+    "graceful-fs": "^4.1.11"
+  },
   "devDependencies": {
     "benchmark": "^2.1.4",
     "fs-extra": "^1.0.0",
-    "glob": "^7.1.1",
+    "glob": "^7.1.2",
     "minimist": "^1.2.0",
-    "mocha": "^3.2.0",
+    "mocha": "^3.5.0",
     "standard": "^8.6.0",
-    "walk-sync": "^0.3.1"
-  },
-  "optionalDependencies": {
-    "graceful-fs": "^4.1.11"
+    "walk-sync": "^0.3.2"
   },
   "standard": {
     "env": [

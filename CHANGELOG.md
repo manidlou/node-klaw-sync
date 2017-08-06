@@ -1,3 +1,9 @@
+3.0.0 / 2017-08-06
+------------------
+
+### Changed
+- `graceful-fs` is now a regular dependency, and is always loaded. This should speed up `require` time.
+
 2.1.0 / 2017-04-25
 ------------------
 
