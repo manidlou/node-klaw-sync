@@ -3,21 +3,14 @@ const fs = require('graceful-fs')
 const path = require('path')
 
 function klawSync (dir, opts, ls) {
-  opts = opts || {}
-  ls = ls || []
-  dir = path.resolve(dir)
-  const files = fs.readdirSync(dir)
-  for (let i = 0; i < files.length; i += 1) {
-    // here dir already resolved, we use string concatenation since
-    // showed better performance than path.join() and path.resolve()
-    let pathItem
-    if (path.sep === '/') pathItem = dir + '/' + files[i]
-    else pathItem = dir + '\\' + files[i]
-    procPath(pathItem)
+  if (!ls) {
+    opts = opts || {}
+    ls = []
+    dir = path.resolve(dir)
   }
-  return ls
-
-  function procPath (pi) {
+  const paths = fs.readdirSync(dir).map(p => dir + path.sep + p)
+  for (var i = 0; i < paths.length; i += 1) {
+    const pi = paths[i]
     const st = fs.lstatSync(pi)
     const item = {path: pi, stats: st}
     if (st.isDirectory()) {
@@ -40,6 +33,7 @@ function klawSync (dir, opts, ls) {
       }
     }
   }
+  return ls
 }
 
 module.exports = klawSync
