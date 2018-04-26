@@ -6,10 +6,10 @@ const path = require('path')
 function klawSync (dir, opts) {
   dir = path.resolve(dir)
   opts = opts || {}
-  return _klawSync(dir, opts, [])
+  return walk(dir, opts, [])
 }
 
-function _klawSync (dir, opts, ls) {
+function walk (dir, opts, ls) {
   const paths = fs.readdirSync(dir).map(p => dir + path.sep + p)
   for (var i = 0; i < paths.length; i += 1) {
     const pi = paths[i]
@@ -19,13 +19,13 @@ function _klawSync (dir, opts, ls) {
       if (opts.filter) {
         if (opts.filter(item) && !opts.nodir) {
           ls.push(item)
-          ls = _klawSync(pi, opts, ls)
+          ls = walk(pi, opts, ls)
         } else {
-          if (!opts.noRecurseOnFailedFilter) ls = _klawSync(pi, opts, ls)
+          if (!opts.noRecurseOnFailedFilter) ls = walk(pi, opts, ls)
         }
       } else {
         if (!opts.nodir) ls.push(item)
-        ls = _klawSync(pi, opts, ls)
+        ls = walk(pi, opts, ls)
       }
     } else {
       if (opts.filter) {
