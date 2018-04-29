@@ -1,18 +1,31 @@
 'use strict'
+const fs = require('fs-extra')
 const path = require('path')
+const mkp = require('mkp')
 const argv = require('minimist')(process.argv.slice(2))
 const Benchmark = require('benchmark')
 const walkSync = require('walk-sync')
 const globSync = require('glob').sync
 const klawSync = require('../klaw-sync.js')
 
-function help () {
-  console.log(`Usage examples:\n`)
-  console.log(`npm run benchmark -- --dir=<rootdir>`)
-  console.log(`npm run benchmark -- --dir=<rootdir> --nodir=true (ignore all directories)`)
+const testDir = path.join(__dirname, 'klaw-sync-benchmark-fixtures')
+const paths = [
+  {dirs: `${testDir}/{0..9}/{0..9}`, files: `${testDir}/{0..9}/{0..9}/{0..9}.txt`}, // 1000 files
+  {dirs: `${testDir}/{0..9}/{0..9}/{0..9}`, files: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}.txt`}, // 10,000
+  {dirs: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}`, files: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}/{0..9}.txt`} // 100,000
+]
+
+function tearDown () {
+  fs.removeSync(testDir)
 }
 
-function runBm (root, opts) {
+function setup (p) {
+  tearDown()
+  mkp.sync(p.dirs)
+  mkp.sync(p.files)
+}
+
+function run (root, opts) {
   if (!opts) {
     const suite = Benchmark.Suite()
     suite.add('walk-sync', function () {
@@ -48,6 +61,7 @@ function runBm (root, opts) {
     }).add('klaw-sync', function () {
       klawSync(root, {nodir: true})
     }).on('error', function (er) {
+      tearDown()
       return er
     }).on('cycle', function (ev) {
       console.log(String(ev.target))
@@ -57,18 +71,19 @@ function runBm (root, opts) {
   }
 }
 
-if (!argv.dir) {
-  console.log('err: root dir cannot be null.')
-  help()
-} else {
-  const dir = path.resolve(argv.dir)
-  console.log('Running benchmark tests..')
+console.log('Running benchmark tests..')
+paths.forEach(p => {
+  setup(p)
+  const items = klawSync(testDir)
   if (argv.nodir) {
-    console.log(`root dir: ${dir}`)
-    console.log('option.nodir: true\n')
-    runBm(dir, {nodir: true})
+    const filesLen = items.filter(item => !item.stats.isDirectory()).length
+    console.log('\noption.nodir: true')
+    console.log(`root dir length: ${items.length}`)
+    console.log(`files: ${filesLen}\n`)
+    run(testDir, {nodir: true})
   } else {
-    console.log(`root dir: ${dir}\n`)
-    runBm(dir)
+    console.log(`\nroot dir length: ${items.length}\n`)
+    run(testDir)
   }
-}
+  tearDown()
+})

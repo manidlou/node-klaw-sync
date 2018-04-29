@@ -26,7 +26,7 @@ describe('klaw-sync', () => {
     try {
       klawSync('dirDoesNotExist/')
     } catch (err) {
-      assert.equal(err.code, 'ENOENT')
+      assert.strictEqual(err.code, 'ENOENT')
     }
   })
 
@@ -34,7 +34,7 @@ describe('klaw-sync', () => {
     try {
       klawSync(FILES[0])
     } catch (err) {
-      assert.equal(err.code, 'ENOTDIR')
+      assert.strictEqual(err.code, 'ENOTDIR')
     }
   })
 
@@ -49,11 +49,11 @@ describe('klaw-sync', () => {
       {path: FILES[2], stats: fs.statSync(FILES[2])}
     ]
     const items = klawSync(TEST_DIR)
-    assert.equal(items.length, paths.length)
+    assert.strictEqual(items.length, paths.length)
     items.forEach((p, i) => {
-      assert.deepEqual(p, paths[i])
+      assert.deepStrictEqual(p, paths[i])
       assert.strictEqual(p.path, paths[i].path)
-      assert.deepEqual(p.stats, paths[i].stats)
+      assert.deepStrictEqual(p.stats, paths[i].stats)
     })
   })
 
@@ -64,11 +64,11 @@ describe('klaw-sync', () => {
       {path: FILES[2], stats: fs.lstatSync(FILES[2])}
     ]
     const files = klawSync(TEST_DIR, {nodir: true})
-    assert.equal(files.length, filesOnly.length)
+    assert.strictEqual(files.length, filesOnly.length)
     files.forEach((f, i) => {
-      assert.deepEqual(f, filesOnly[i])
+      assert.deepStrictEqual(f, filesOnly[i])
       assert.strictEqual(f.path, filesOnly[i].path)
-      assert.deepEqual(f.stats, filesOnly[i].stats)
+      assert.deepStrictEqual(f.stats, filesOnly[i].stats)
     })
   })
 
@@ -80,11 +80,11 @@ describe('klaw-sync', () => {
       {path: DIRS[3], stats: fs.lstatSync(DIRS[3])}
     ]
     const dirs = klawSync(TEST_DIR, {nofile: true})
-    assert.equal(dirs.length, dirsOnly.length)
+    assert.strictEqual(dirs.length, dirsOnly.length)
     dirs.forEach((dir, i) => {
-      assert.deepEqual(dir, dirsOnly[i])
+      assert.deepStrictEqual(dir, dirsOnly[i])
       assert.strictEqual(dir.path, dirsOnly[i].path)
-      assert.deepEqual(dir.stats, dirsOnly[i].stats)
+      assert.deepStrictEqual(dir.stats, dirsOnly[i].stats)
     })
   })
 
@@ -100,11 +100,11 @@ describe('klaw-sync', () => {
       ]
       const filterFunc = i => path.extname(i.path) === '.js'
       const items = klawSync(TEST_DIR, {filter: filterFunc})
-      assert.equal(items.length, paths.length)
+      assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
-        assert.deepEqual(p, paths[i])
+        assert.deepStrictEqual(p, paths[i])
         assert.strictEqual(p.path, paths[i].path)
-        assert.deepEqual(p.stats, paths[i].stats)
+        assert.deepStrictEqual(p.stats, paths[i].stats)
       })
     })
 
@@ -119,11 +119,11 @@ describe('klaw-sync', () => {
       ]
       const filterFunc = i => i.stats.isFile() && i.stats.size > 0
       const items = klawSync(TEST_DIR, {filter: filterFunc})
-      assert.equal(items.length, paths.length)
+      assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
-        assert.deepEqual(p, paths[i])
+        assert.deepStrictEqual(p, paths[i])
         assert.strictEqual(p.path, paths[i].path)
-        assert.deepEqual(p.stats, paths[i].stats)
+        assert.deepStrictEqual(p.stats, paths[i].stats)
       })
     })
 
@@ -138,11 +138,11 @@ describe('klaw-sync', () => {
       ]
       const filterFunc = i => path.extname(i.path) === '.js' && i.stats.size > 0
       const items = klawSync(TEST_DIR, {filter: filterFunc})
-      assert.equal(items.length, paths.length)
+      assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
-        assert.deepEqual(p, paths[i])
+        assert.deepStrictEqual(p, paths[i])
         assert.strictEqual(p.path, paths[i].path)
-        assert.deepEqual(p.stats, paths[i].stats)
+        assert.deepStrictEqual(p.stats, paths[i].stats)
       })
     })
 
@@ -161,11 +161,11 @@ describe('klaw-sync', () => {
       ]
       const filterFunc = i => i.path.indexOf('node_modules') < 0
       const items = klawSync(TEST_DIR, {filter: filterFunc, noRecurseOnFailedFilter: true})
-      assert.equal(items.length, paths.length)
+      assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
-        assert.deepEqual(p, paths[i])
+        assert.deepStrictEqual(p, paths[i])
         assert.strictEqual(p.path, paths[i].path)
-        assert.deepEqual(p.stats, paths[i].stats)
+        assert.deepStrictEqual(p.stats, paths[i].stats)
       })
     })
 
@@ -185,11 +185,11 @@ describe('klaw-sync', () => {
       ]
       const filterFunc = i => i.path.indexOf('node_modules') < 0 && i.path.indexOf('.git') < 0
       const items = klawSync(TEST_DIR, {filter: filterFunc, noRecurseOnFailedFilter: true})
-      assert.equal(items.length, paths.length)
+      assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
-        assert.deepEqual(p, paths[i])
+        assert.deepStrictEqual(p, paths[i])
         assert.strictEqual(p.path, paths[i].path)
-        assert.deepEqual(p.stats, paths[i].stats)
+        assert.deepStrictEqual(p.stats, paths[i].stats)
       })
     })
 
@@ -204,11 +204,11 @@ describe('klaw-sync', () => {
       ]
       const filterFunc = i => i.stats.size > 0
       const items = klawSync(TEST_DIR, {filter: filterFunc, nodir: true})
-      assert.equal(items.length, paths.length)
+      assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
-        assert.deepEqual(p, paths[i])
+        assert.deepStrictEqual(p, paths[i])
         assert.strictEqual(p.path, paths[i].path)
-        assert.deepEqual(p.stats, paths[i].stats)
+        assert.deepStrictEqual(p.stats, paths[i].stats)
       })
     })
 
@@ -225,12 +225,77 @@ describe('klaw-sync', () => {
       ]
       const filterFunc = i => i.path.indexOf('foo') > 0
       const items = klawSync(TEST_DIR, {filter: filterFunc, nofile: true})
-      assert.equal(items.length, paths.length)
+      assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
-        assert.deepEqual(p, paths[i])
+        assert.deepStrictEqual(p, paths[i])
         assert.strictEqual(p.path, paths[i].path)
-        assert.deepEqual(p.stats, paths[i].stats)
+        assert.deepStrictEqual(p.stats, paths[i].stats)
       })
     })
   })
+
+  describe('depth limit', () => {
+    beforeEach(() => {
+      fs.emptyDirSync(TEST_DIR)
+    })
+    it('should honor depthLimit option -1', () => {
+      const expected = ['a', 'a/b', 'a/b/c', 'a/b/c/d.txt', 'a/e.jpg', 'h', 'h/i',
+        'h/i/j', 'h/i/j/k.txt', 'h/i/l.txt', 'h/i/m.jpg']
+      testDepthLimit(-1, expected)
+    })
+
+    it('should honor depthLimit option 0', () => {
+      const expected = ['a', 'h']
+      testDepthLimit(0, expected)
+    })
+
+    it('should honor depthLimit option 1', () => {
+      const expected = ['a', 'a/b', 'a/e.jpg', 'h', 'h/i']
+      testDepthLimit(1, expected)
+    })
+
+    it('should honor depthLimit option 2', () => {
+      const expected = ['a', 'a/b', 'a/b/c', 'a/e.jpg', 'h', 'h/i', 'h/i/j',
+        'h/i/l.txt', 'h/i/m.jpg']
+      testDepthLimit(2, expected)
+    })
+
+    it('should honor depthLimit option 3', () => {
+      const expected = ['a', 'a/b', 'a/b/c', 'a/b/c/d.txt', 'a/e.jpg', 'h', 'h/i',
+        'h/i/j', 'h/i/j/k.txt', 'h/i/l.txt', 'h/i/m.jpg']
+      testDepthLimit(3, expected)
+    })
+
+    function testDepthLimit (depthLimit, expected) {
+      const fixtures = [
+        'a/b/c/d.txt',
+        'a/e.jpg',
+        'h/i/j/k.txt',
+        'h/i/l.txt',
+        'h/i/m.jpg'
+      ]
+      fixtures.forEach(f => {
+        f = path.join(TEST_DIR, f)
+        fs.outputFileSync(f, path.basename(f, path.extname(f)))
+      })
+
+      const items = klawSync(TEST_DIR, {depthLimit: depthLimit}).map(i => i.path)
+      items.sort()
+      expected = expected.map(item => path.join(path.join(TEST_DIR, item)))
+      assert.deepStrictEqual(items, expected)
+    }
+  })
+/*
+  describe('custom fs', () => {
+    let cfs
+    describe('when opts.fs is memory-fs', () => {
+      beforeEach(() => {
+        cfs = new memoryfs()
+        TEST_DIR = cfs.mkdirpSync()
+      })
+      it('should use memory-fs', () => {
+      })
+    })
+  })
+*/
 })
