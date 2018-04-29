@@ -26,13 +26,12 @@
   },
   "devDependencies": {
     "benchmark": "^2.1.4",
-    "fs-extra": "^1.0.0",
+    "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
     "memory-fs": "^0.4.1",
-    "minimist": "^1.2.0",
     "mkp": "^1.0.1",
-    "mocha": "^3.5.0",
-    "standard": "^8.6.0",
+    "mocha": "^5.1.1",
+    "standard": "^11.0.1",
     "walk-sync": "^0.3.2"
   },
   "standard": {

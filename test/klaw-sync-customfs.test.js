@@ -73,15 +73,12 @@ describe('klaw-sync / custom fs', () => {
 
   describe('when opts.filter is true', () => {
     it('should filter based on path', () => {
-      const f1 = path.join(TEST_DIR, 'dir1', 'foo.js')
-      const f2 = path.join(TEST_DIR, 'dir2', 'dir2_1', 'bar.js')
+      const f1 = path.join(TEST_DIR, 'foo.js')
+      const f2 = path.join(TEST_DIR, 'bar.js')
       cfs.writeFileSync(f1, 'f1 file')
       cfs.writeFileSync(f2, 'f2 file')
-      const paths = [
-        {path: f1, stats: cfs.statSync(f1)},
-        {path: f2, stats: cfs.statSync(f2)}
-      ]
-      const filterFunc = i => path.extname(i.path) === '.js'
+      const paths = [{path: f1, stats: cfs.statSync(f1)}]
+      const filterFunc = i => path.basename(i.path).indexOf('foo') > -1
       const items = klawSync(TEST_DIR, {filter: filterFunc, fs: cfs})
       assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {

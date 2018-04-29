@@ -2,7 +2,6 @@
 const fs = require('fs-extra')
 const path = require('path')
 const mkp = require('mkp')
-const argv = require('minimist')(process.argv.slice(2))
 const Benchmark = require('benchmark')
 const walkSync = require('walk-sync')
 const globSync = require('glob').sync
@@ -74,16 +73,7 @@ function run (root, opts) {
 console.log('Running benchmark tests..')
 paths.forEach(p => {
   setup(p)
-  const items = klawSync(testDir)
-  if (argv.nodir) {
-    const filesLen = items.filter(item => !item.stats.isDirectory()).length
-    console.log('\noption.nodir: true')
-    console.log(`root dir length: ${items.length}`)
-    console.log(`files: ${filesLen}\n`)
-    run(testDir, {nodir: true})
-  } else {
-    console.log(`\nroot dir length: ${items.length}\n`)
-    run(testDir)
-  }
+  console.log(`\nroot dir length: ${klawSync(testDir).length}`)
+  run(testDir)
   tearDown()
 })

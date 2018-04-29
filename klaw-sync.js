@@ -18,16 +18,14 @@ function klawSync (dir, opts, ls) {
     if (!st.isDirectory() || (opts.rootDepth && pi.split(path.sep).length - opts.rootDepth >= opts.depthLimit)) {
       if (opts.filter) {
         if (opts.filter(item) && !opts.nofile) ls.push(item)
-      } else {
-        if (!opts.nofile) ls.push(item)
+      } else if (!opts.nofile) {
+        ls.push(item)
       }
     } else {
       if (opts.filter) {
         if (opts.filter(item) && !opts.nodir) {
           ls.push(item)
           ls = klawSync(pi, opts, ls)
-        } else {
-          if (!opts.noRecurseOnFailedFilter) ls = klawSync(pi, opts, ls)
         }
       } else {
         if (!opts.nodir) ls.push(item)
