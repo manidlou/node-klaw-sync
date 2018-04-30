@@ -4,8 +4,7 @@ node-klaw-sync
 [![npm Package](https://img.shields.io/npm/v/klaw-sync.svg?style=flat-square)](https://www.npmjs.com/package/klaw-sync)
 [![Build Status](https://travis-ci.org/manidlou/node-klaw-sync.svg?branch=master)](https://travis-ci.org/manidlou/node-klaw-sync)
 [![windows Build status](https://ci.appveyor.com/api/projects/status/braios34k6qw4h5p/branch/master?svg=true)](https://ci.appveyor.com/project/manidlou/node-klaw-sync/branch/master)
-
-<a href="https://github.com/feross/standard" style="float: right; padding: 0 0 20px 20px;"><img src="https://cdn.rawgit.com/feross/standard/master/sticker.svg" alt="Standard JavaScript" width="100" align="right"></a>
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 `klaw-sync` is a Node.js recursive file system walker, which is the synchronous counterpart of [klaw](https://github.com/jprichardson/node-klaw). It lists all files and directories inside a directory recursively and returns an array of objects that each object has two properties: `path` and `stats`. `path` is the full path of the file or directory and `stats` is an instance of [fs.Stats](https://nodejs.org/api/fs.html#fs_class_fs_stats).
 
@@ -26,7 +25,7 @@ Usage
   - `nofile` `<Boolean>`
     - return only directories (ignore files).
   - `depthLimit`: `<Number>`
-    - the number of times to recurse before stopping. -1 for unlimited.
+    - the number of times to recurse before stopping. `-1` for unlimited.
   - `fs`: `<Object>`
     - custom `fs`, useful for mocking `fs` object.
   - `filter` `<Function>`
@@ -113,7 +112,6 @@ unit test: `npm run unit`
 
 lint & unit: `npm test`
 
-
 Performance compare to other similar modules
 -----------------------------------------------
 
@@ -129,26 +127,27 @@ It turned out (as of January 25, 2017) for the most cases `klaw-sync` is faster 
 
 `npm run benchmark`
 
-##### results
+##### results (tested on ubuntu 16.04, Intel(R) Core(TM) i7-2630QM CPU @ 2.00GHz, 8 cpus, 8g ram, node v10.0.0)
+
 ```bash
 Running benchmark tests..
 
 root dir length: 1110
-walk-sync x 154 ops/sec ±0.85% (79 runs sampled)
-glob.sync x 20.61 ops/sec ±2.52% (38 runs sampled)
-klaw-sync x 173 ops/sec ±2.63% (77 runs sampled)
+walk-sync x 157 ops/sec ±1.94% (77 runs sampled)
+glob.sync x 20.61 ops/sec ±2.78% (38 runs sampled)
+klaw-sync x 182 ops/sec ±0.91% (81 runs sampled)
 Fastest is klaw-sync
 
 root dir length: 11110
-walk-sync x 14.56 ops/sec ±0.68% (40 runs sampled)
-glob.sync x 1.83 ops/sec ±5.92% (9 runs sampled)
-klaw-sync x 16.17 ops/sec ±2.78% (44 runs sampled)
+walk-sync x 14.83 ops/sec ±2.16% (40 runs sampled)
+glob.sync x 1.88 ops/sec ±2.69% (9 runs sampled)
+klaw-sync x 16.60 ops/sec ±0.93% (44 runs sampled)
 Fastest is klaw-sync
 
 root dir length: 111110
-walk-sync x 1.25 ops/sec ±2.24% (8 runs sampled)
-glob.sync x 0.17 ops/sec ±7.13% (5 runs sampled)
-klaw-sync x 1.37 ops/sec ±1.48% (8 runs sampled)
+walk-sync x 1.25 ops/sec ±2.63% (8 runs sampled)
+glob.sync x 0.17 ops/sec ±1.06% (5 runs sampled)
+klaw-sync x 1.36 ops/sec ±4.66% (8 runs sampled)
 Fastest is klaw-sync
 ```
 
