@@ -1,3 +1,13 @@
+4.0.0 / 2018-04-29
+------------------
+
+### Removed
+- **BREAKING** Removed `noRecurseOnFailedFilter` option because it was counter-intuitive and confusing.
+
+### Added
+- `fs` option. It is useful when mocking `fs` object.
+- `depthLimit` option. It can be used to specify the number of times to recurse before stoppig.
+
 3.0.2 / 2017-10-21
 ------------------
 
