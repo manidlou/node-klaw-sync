@@ -15,7 +15,8 @@ function klawSync (dir, opts, ls) {
     const pi = paths[i]
     const st = opts.fs.statSync(pi)
     const item = {path: pi, stats: st}
-    if (!st.isDirectory() || (opts.rootDepth && pi.split(path.sep).length - opts.rootDepth >= opts.depthLimit)) {
+    if (!st.isDirectory() || (opts.rootDepth &&
+      pi.split(path.sep).length - opts.rootDepth >= opts.depthLimit)) {
       if (opts.filter) {
         if (opts.filter(item) && !opts.nofile) ls.push(item)
       } else if (!opts.nofile) {

@@ -129,6 +129,29 @@ It turned out (as of January 25, 2017) for the most cases `klaw-sync` is faster 
 
 `npm run benchmark`
 
+##### results
+```bash
+Running benchmark tests..
+
+root dir length: 1110
+walk-sync x 154 ops/sec ±0.85% (79 runs sampled)
+glob.sync x 20.61 ops/sec ±2.52% (38 runs sampled)
+klaw-sync x 173 ops/sec ±2.63% (77 runs sampled)
+Fastest is klaw-sync
+
+root dir length: 11110
+walk-sync x 14.56 ops/sec ±0.68% (40 runs sampled)
+glob.sync x 1.83 ops/sec ±5.92% (9 runs sampled)
+klaw-sync x 16.17 ops/sec ±2.78% (44 runs sampled)
+Fastest is klaw-sync
+
+root dir length: 111110
+walk-sync x 1.25 ops/sec ±2.24% (8 runs sampled)
+glob.sync x 0.17 ops/sec ±7.13% (5 runs sampled)
+klaw-sync x 1.37 ops/sec ±1.48% (8 runs sampled)
+Fastest is klaw-sync
+```
+
 Credit
 ------
 
