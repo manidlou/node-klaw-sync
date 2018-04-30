@@ -112,6 +112,8 @@ unit test: `npm run unit`
 
 lint & unit: `npm test`
 
+benchmark: `npm run benchmark`
+
 Performance compare to other similar modules
 -----------------------------------------------
 
@@ -122,10 +124,6 @@ Running some basic [benchmark](https://github.com/bestiejs/benchmark.js) tests o
 - [glob.sync](https://github.com/isaacs/node-glob#globsyncpattern-options)
 
 It turned out (as of January 25, 2017) for the most cases `klaw-sync` is faster than other modules!
-
-##### run benchmark
-
-`npm run benchmark`
 
 ##### results (tested on ubuntu 16.04, Intel(R) Core(TM) i7-2630QM CPU @ 2.00GHz, 8 cpus, 8g ram, node v10.0.0)
 
