@@ -5,10 +5,12 @@ const klawSync = require('../klaw-sync.js')
 const Memoryfs = require('memory-fs')
 const cfs = new Memoryfs()
 
+const TEST_DIR = path.join(__dirname, 'klaw-sync-test-custom-fs')
+after(() => cfs.rmdirSync(TEST_DIR))
+
 describe('klaw-sync / custom fs', () => {
   const dirnames = ['dir1', 'dir2', 'dir2/dir2_1', 'dir2/dir2_1/dir2_1_1']
   const filenames = ['dir1/file1_2', 'dir2/dir2_1/file2_1_1', 'file1']
-  const TEST_DIR = process.platform === 'win32' ? '\\klaw-sync-test-custom-fs' : '/klaw-sync-test-custom-fs'
   cfs.mkdirpSync(TEST_DIR)
   let DIRS, FILES
 
