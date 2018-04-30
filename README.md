@@ -131,21 +131,21 @@ It turned out (as of January 25, 2017) for the most cases `klaw-sync` is faster 
 Running benchmark tests..
 
 root dir length: 1110
-walk-sync x 157 ops/sec ±1.94% (77 runs sampled)
-glob.sync x 20.61 ops/sec ±2.78% (38 runs sampled)
-klaw-sync x 182 ops/sec ±0.91% (81 runs sampled)
+walk-sync x 151 ops/sec ±2.66% (75 runs sampled)
+glob.sync x 20.60 ops/sec ±3.84% (38 runs sampled)
+klaw-sync x 182 ops/sec ±2.40% (81 runs sampled)
 Fastest is klaw-sync
 
 root dir length: 11110
-walk-sync x 14.83 ops/sec ±2.16% (40 runs sampled)
-glob.sync x 1.88 ops/sec ±2.69% (9 runs sampled)
-klaw-sync x 16.60 ops/sec ±0.93% (44 runs sampled)
+walk-sync x 15.39 ops/sec ±0.44% (42 runs sampled)
+glob.sync x 1.92 ops/sec ±2.74% (9 runs sampled)
+klaw-sync x 17.03 ops/sec ±0.62% (45 runs sampled)
 Fastest is klaw-sync
 
 root dir length: 111110
-walk-sync x 1.25 ops/sec ±2.63% (8 runs sampled)
-glob.sync x 0.17 ops/sec ±1.06% (5 runs sampled)
-klaw-sync x 1.36 ops/sec ±4.66% (8 runs sampled)
+walk-sync x 1.24 ops/sec ±6.64% (8 runs sampled)
+glob.sync x 0.16 ops/sec ±6.55% (5 runs sampled)
+klaw-sync x 1.40 ops/sec ±2.30% (8 runs sampled)
 Fastest is klaw-sync
 ```
 
