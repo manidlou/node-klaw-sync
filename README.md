@@ -27,7 +27,7 @@ Usage
   - `depthLimit`: `<Number>`
     - the number of times to recurse before stopping. `-1` for unlimited.
   - `fs`: `<Object>`
-    - custom `fs`, useful for mocking `fs` object.
+    - custom `fs`, useful when mocking `fs` object.
   - `filter` `<Function>`
     - function that gets one argument `fn({path: '', stats: {}})` and returns true to include or false to exclude the item.
 
