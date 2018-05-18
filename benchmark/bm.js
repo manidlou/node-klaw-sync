@@ -14,6 +14,14 @@ const paths = [
   {dirs: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}`, files: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}/{0..9}.txt`} // 100,000
 ]
 
+console.log('Running benchmark tests..')
+paths.forEach(p => {
+  setup(p)
+  console.log(`\nroot dir length: ${klawSync(testDir).length}`)
+  run(testDir)
+  tearDown()
+})
+
 function tearDown () {
   fs.removeSync(testDir)
 }
@@ -24,56 +32,24 @@ function setup (p) {
   mkp.sync(p.files)
 }
 
-function run (root, opts) {
-  if (!opts) {
-    const suite = Benchmark.Suite()
-    suite.add('walk-sync', function () {
-      walkSync(root)
-    }).add('glob.sync', function () {
-      globSync('**', {
-        cwd: root,
-        dot: true,
-        mark: true,
-        strict: true
-      })
-    }).add('klaw-sync', function () {
-      klawSync(root)
-    }).on('error', function (er) {
-      return er
-    }).on('cycle', function (ev) {
-      console.log(String(ev.target))
-    }).on('complete', function () {
-      console.log('Fastest is ' + this.filter('fastest').map('name'))
-    }).run()
-  } else {
-    const suite = Benchmark.Suite()
-    suite.add('walk-sync', function () {
-      walkSync(root, {directories: false})
-    }).add('glob.sync', function () {
-      globSync('**', {
-        cwd: root,
-        dot: true,
-        mark: true,
-        strict: true,
-        nodir: true
-      })
-    }).add('klaw-sync', function () {
-      klawSync(root, {nodir: true})
-    }).on('error', function (er) {
-      tearDown()
-      return er
-    }).on('cycle', function (ev) {
-      console.log(String(ev.target))
-    }).on('complete', function () {
-      console.log('Fastest is ' + this.filter('fastest').map('name'))
-    }).run()
-  }
+function run (root) {
+  const suite = Benchmark.Suite()
+  suite.add('walk-sync', function () {
+    walkSync(root)
+  }).add('glob.sync', function () {
+    globSync('**', {
+      cwd: root,
+      dot: true,
+      mark: true,
+      strict: true
+    })
+  }).add('klaw-sync', function () {
+    klawSync(root)
+  }).on('error', function (er) {
+    return er
+  }).on('cycle', function (ev) {
+    console.log(String(ev.target))
+  }).on('complete', function () {
+    console.log('Fastest is ' + this.filter('fastest').map('name'))
+  }).run()
 }
-
-console.log('Running benchmark tests..')
-paths.forEach(p => {
-  setup(p)
-  console.log(`\nroot dir length: ${klawSync(testDir).length}`)
-  run(testDir)
-  tearDown()
-})
