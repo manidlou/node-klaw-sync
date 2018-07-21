@@ -229,6 +229,41 @@ describe('klaw-sync', () => {
       testDepthLimit(3, expected)
     })
 
+    it('should honor depthLimit option -1 with nodir = true', () => {
+      const expected = ['a/b/c/d.txt', 'a/e.jpg', 'h/i/j/k.txt', 'h/i/l.txt', 'h/i/m.jpg', 't.txt']
+      testDepthLimitNoDir(-1, expected)
+    })
+
+    it('should honor depthLimit option 0 with nodir = true', () => {
+      const expected = ['t.txt']
+      testDepthLimitNoDir(0, expected)
+    })
+
+    it('should honor depthLimit option 1 with nodir = true', () => {
+      const expected = ['a/e.jpg', 't.txt']
+      testDepthLimitNoDir(1, expected)
+    })
+
+    function testDepthLimitNoDir (depthLimit, expected) {
+      const fixtures = [
+        'a/b/c/d.txt',
+        'a/e.jpg',
+        'h/i/j/k.txt',
+        'h/i/l.txt',
+        'h/i/m.jpg',
+        't.txt'
+      ]
+      fixtures.forEach(f => {
+        f = path.join(TEST_DIR, f)
+        fs.outputFileSync(f, path.basename(f, path.extname(f)))
+      })
+
+      const items = klawSync(TEST_DIR, {depthLimit: depthLimit, nodir: true, test: true}).map(i => i.path)
+      items.sort()
+      expected = expected.map(item => path.join(path.join(TEST_DIR, item)))
+      assert.deepStrictEqual(items, expected)
+    }
+
     function testDepthLimit (depthLimit, expected) {
       const fixtures = [
         'a/b/c/d.txt',

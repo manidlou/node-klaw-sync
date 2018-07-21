@@ -19,7 +19,7 @@ function klawSync (dir, opts, ls) {
       pi.split(path.sep).length - opts.rootDepth >= opts.depthLimit)) {
       if (opts.filter) {
         if (opts.filter(item) && !opts.nofile) ls.push(item)
-      } else if (!opts.nofile) {
+      } else if ((!opts.nofile && !st.isDirectory()) || (!opts.nodir && st.isDirectory())) {
         ls.push(item)
       }
     } else {
