@@ -15,23 +15,13 @@ function klawSync (dir, opts, ls) {
     const pi = paths[i]
     const st = opts.fs.statSync(pi)
     const item = {path: pi, stats: st}
-    if (!st.isDirectory() || (opts.rootDepth &&
-      pi.split(path.sep).length - opts.rootDepth >= opts.depthLimit)) {
-      if (opts.filter) {
-        if (opts.filter(item) && !opts.nofile) ls.push(item)
-      } else if ((!opts.nofile && !st.isDirectory()) || (!opts.nodir && st.isDirectory())) {
-        ls.push(item)
-      }
-    } else {
-      if (opts.filter) {
-        if (opts.filter(item) && !opts.nodir) {
-          ls.push(item)
-          ls = klawSync(pi, opts, ls)
-        }
-      } else {
-        if (!opts.nodir) ls.push(item)
-        ls = klawSync(pi, opts, ls)
-      }
+    const isUnderDepthLimit = (!opts.rootDepth || pi.split(path.sep).length - opts.rootDepth < opts.depthLimit)
+
+    if (st.isDirectory()) {
+      if (!opts.nodir) { if ((opts.filter && opts.filter(item)) || !opts.filter) ls.push(item) }
+      if (isUnderDepthLimit && ((opts.filter && opts.filter(item)) || !opts.filter)) ls = klawSync(pi, opts, ls)
+    } else if (!st.isDirectory()) {
+      if (!opts.nofile) { if ((opts.filter && opts.filter(item)) || !opts.filter) ls.push(item) }
     }
   }
   return ls
