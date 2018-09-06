@@ -27,12 +27,11 @@
   "devDependencies": {
     "benchmark": "^2.1.4",
     "fs-extra": "^5.0.0",
-    "glob": "^7.1.2",
     "memory-fs": "^0.4.1",
     "mkp": "^1.0.1",
     "mocha": "^5.1.1",
     "standard": "^11.0.1",
-    "walk-sync": "^0.3.2"
+    "walk-sync": "^0.3.3"
   },
   "standard": {
     "env": [

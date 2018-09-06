@@ -4,7 +4,6 @@ const path = require('path')
 const mkp = require('mkp')
 const Benchmark = require('benchmark')
 const walkSync = require('walk-sync')
-const globSync = require('glob').sync
 const klawSync = require('../klaw-sync.js')
 
 const testDir = path.join(__dirname, 'klaw-sync-benchmark-fixtures')
@@ -36,13 +35,6 @@ function run (root) {
   const suite = Benchmark.Suite()
   suite.add('walk-sync', function () {
     walkSync(root)
-  }).add('glob.sync', function () {
-    globSync('**', {
-      cwd: root,
-      dot: true,
-      mark: true,
-      strict: true
-    })
   }).add('klaw-sync', function () {
     klawSync(root)
   }).on('error', function (er) {

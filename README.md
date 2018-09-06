@@ -117,35 +117,31 @@ benchmark: `npm run benchmark`
 Performance compare to other similar modules
 -----------------------------------------------
 
-Running some basic [benchmark](https://github.com/bestiejs/benchmark.js) tests on these modules:
+Running some [benchmark](https://github.com/bestiejs/benchmark.js) tests on these modules:
 
 - `klaw-sync`
 - [walk-sync](https://github.com/joliss/node-walk-sync)
-- [glob.sync](https://github.com/isaacs/node-glob#globsyncpattern-options)
 
-It turned out (as of January 25, 2017) for the most cases `klaw-sync` is faster than other modules!
+(as of Jan 25, 2017) `klaw-sync` is the fastest module!
 
-##### results (tested on ubuntu 16.04, Intel(R) Core(TM) i7-2630QM CPU @ 2.00GHz, 8 cpus, 8g ram, node v10.0.0)
+##### results (tested on Ubuntu 18.04, Intel(R) Core(TM) i7-2630QM CPU @ 2.00GHz, 8 CPUs, 8g RAM, node v10.9.0)
 
 ```bash
 Running benchmark tests..
 
 root dir length: 1110
-walk-sync x 151 ops/sec ±2.66% (75 runs sampled)
-glob.sync x 20.60 ops/sec ±3.84% (38 runs sampled)
-klaw-sync x 182 ops/sec ±2.40% (81 runs sampled)
+walk-sync x 139 ops/sec ±2.48% (76 runs sampled)
+klaw-sync x 163 ops/sec ±1.20% (80 runs sampled)
 Fastest is klaw-sync
 
 root dir length: 11110
-walk-sync x 15.39 ops/sec ±0.44% (42 runs sampled)
-glob.sync x 1.92 ops/sec ±2.74% (9 runs sampled)
-klaw-sync x 17.03 ops/sec ±0.62% (45 runs sampled)
+walk-sync x 13.23 ops/sec ±1.10% (37 runs sampled)
+klaw-sync x 15.10 ops/sec ±1.06% (41 runs sampled)
 Fastest is klaw-sync
 
 root dir length: 111110
-walk-sync x 1.24 ops/sec ±6.64% (8 runs sampled)
-glob.sync x 0.16 ops/sec ±6.55% (5 runs sampled)
-klaw-sync x 1.40 ops/sec ±2.30% (8 runs sampled)
+walk-sync x 1.17 ops/sec ±2.06% (7 runs sampled)
+klaw-sync x 1.25 ops/sec ±2.10% (8 runs sampled)
 Fastest is klaw-sync
 ```
 
