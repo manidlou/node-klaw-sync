@@ -1,3 +1,9 @@
+5.0.0 / 2018-09-05
+------------------
+
+### Changed
+- Updated the algorithm to handle `depthLimit` option properly. [#12] (Thanks to [@Geelik](https://github.com/Geelik))
+
 4.0.0 / 2018-04-30
 ------------------
 
@@ -6,7 +12,7 @@
 
 ### Added
 - `fs` option. It is useful when mocking `fs` object.
-- `depthLimit` option. It can be used to specify the number of times to recurse before stoppig.
+- `depthLimit` option. It can be used to specify the number of times to recurse before stopping.
 
 3.0.2 / 2017-10-21
 ------------------
@@ -38,7 +44,7 @@
 1.1.2 / 2017-02-17
 ------------------
 
-- Changed to traditional for loop instead of using Array.forEach() because of better performance.
+- Changed to traditional for loop instead of using `Array.forEach()` because of better performance.
 
 1.1.1 / 2017-02-05
 ------------------
@@ -57,4 +63,4 @@
 - initial release
 
 [#1]: https://github.com/manidlou/node-klaw-sync/issues/1 "loading all files with certain name"
-
+[#12]: https://github.com/manidlou/node-klaw-sync/pull/12 "Fixing logic issues"
