@@ -1,3 +1,4 @@
 node_modules/
 benchmark/klaw-sync-benchmark-fixtures/
 npm-debug.log
+.idea
