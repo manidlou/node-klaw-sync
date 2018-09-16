@@ -335,4 +335,53 @@ describe('klaw-sync', () => {
       assert.deepStrictEqual(items, expected)
     }
   })
+  describe('traverse all', function () {
+    beforeEach(() => {
+      fs.emptyDirSync(TEST_DIR)
+    })
+    it('should honor traverseAll option with no filter & nodir: false', () => {
+      const expected = ['a', 'a/b', 'a/b/c', 'a/b/c/d.txt', 'a/e.jpg', 'h', 'h/i',
+        'h/i/j', 'h/i/j/k.txt', 'h/i/l.txt', 'h/i/m.jpg', 't.txt']
+      testTraverseAll({ nodir: false }, expected)
+    })
+    it('should honor traverseAll option with no filter & nodir: true', () => {
+      const expected = ['a/b/c/d.txt', 'a/e.jpg', 'h/i/j/k.txt', 'h/i/l.txt', 'h/i/m.jpg', 't.txt']
+      testTraverseAll({ nodir: true }, expected)
+    })
+    it('should honor traverseAll option with filter & nodir: true', () => {
+      const expected = ['a/b/c/d.txt', 'h/i/j/k.txt', 'h/i/l.txt', 't.txt']
+      const filter = function (item) {
+        return path.extname(item.path) === '.txt' // no need to greenlight dirs in filter
+      }
+      testTraverseAll({ nodir: true, filter }, expected)
+    })
+    it('should honor traverseAll option with filter & nodir: false', () => {
+      const expected = ['a', 'a/b', 'a/b/c', 'a/e.jpg', 'h',
+        'h/i/j', 'h/i/m.jpg']
+      const filter = function (item) {
+        return path.basename(item.path) !== 'i' && path.extname(item.path) !== '.txt'
+      }
+      testTraverseAll({ nodir: false, filter }, expected)
+    })
+
+    function testTraverseAll ({ filter, nodir = false } = {}, expected) {
+      const fixtures = [
+        'a/b/c/d.txt',
+        'a/e.jpg',
+        'h/i/j/k.txt',
+        'h/i/l.txt',
+        'h/i/m.jpg',
+        't.txt'
+      ]
+      fixtures.forEach(f => {
+        f = path.join(TEST_DIR, f)
+        fs.outputFileSync(f, path.basename(f, path.extname(f)))
+      })
+
+      const items = klawSync(TEST_DIR, { traverseAll: true, nodir, filter }).map(i => i.path)
+      items.sort()
+      expected = expected.map(item => path.join(path.join(TEST_DIR, item)))
+      assert.deepStrictEqual(items, expected)
+    }
+  })
 })

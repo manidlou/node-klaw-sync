@@ -16,12 +16,16 @@ function klawSync (dir, opts, ls) {
     const st = opts.fs.statSync(pi)
     const item = {path: pi, stats: st}
     const isUnderDepthLimit = (!opts.rootDepth || pi.split(path.sep).length - opts.rootDepth < opts.depthLimit)
+    const filterResult = opts.filter ? opts.filter(item) : true
+    const isDirectory = st.isDirectory()
+    const shouldAdd = filterResult && (isDirectory ? !opts.nodir : !opts.nofile)
+    const shouldTraverse = isDirectory && isUnderDepthLimit && (opts.traverseAll || filterResult)
 
-    if (st.isDirectory()) {
-      if (!opts.nodir) { if ((opts.filter && opts.filter(item)) || !opts.filter) ls.push(item) }
-      if (isUnderDepthLimit && ((opts.filter && opts.filter(item)) || !opts.filter)) ls = klawSync(pi, opts, ls)
-    } else if (!st.isDirectory()) {
-      if (!opts.nofile) { if ((opts.filter && opts.filter(item)) || !opts.filter) ls.push(item) }
+    if (shouldAdd) {
+      ls.push(item)
+    }
+    if (shouldTraverse) {
+      ls = klawSync(pi, opts, ls)
     }
   }
   return ls
