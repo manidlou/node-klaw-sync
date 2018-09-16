@@ -31,7 +31,8 @@ Usage
     - custom `fs`, useful when mocking `fs` object.
   - `filter` `<Function>`
     - function that gets one argument `fn({path: '', stats: {}})` and returns true to include or false to exclude the item.
-
+  - `traverseAll` `<Boolean>`
+    - traverse all subdirectories, regardless of `filter` option. (When set to `true`, `traverseAll` produces similar behavior to the default behavior prior to v4.0.0. The current default of  `traverseAll: false` is equivalent to the old `noRecurseOnFailedFilter: true`).
 - **Return:** `<Array<Object>>` `[{path: '', stats: {}}]`
 
 Examples
@@ -93,7 +94,7 @@ const paths = klawSync('/some/dir', { filter: filterFn})
 
 _**filter based on stats**_
 
-Again here `noRecurseOnFailedFilter` option is not required since we still want to read all directories even though they don't pass the `filter` function, to see if their contents pass the `filter` function.
+Here `traverseAll` option is required since we still want to read all directories even if they don't pass the `filter` function, to see if their contents do pass the `filter` function.
 
 ```js
 const klawSync = require('klaw-sync')
