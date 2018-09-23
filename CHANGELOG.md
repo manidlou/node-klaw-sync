@@ -1,3 +1,9 @@
+6.0.0 / 2018-09-22
+------------------
+
+### Added
+- `traverseAll` option. It would allow to traverse all subdirectories regardless of filter option. [#13] (Thanks to [@jskrzypek](https://github.com/jskrzypek))
+
 5.0.0 / 2018-09-05
 ------------------
 
