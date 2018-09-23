@@ -1,6 +1,6 @@
 {
   "name": "klaw-sync",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "Recursive, synchronous, and fast file system walker",
   "main": "klaw-sync.js",
   "repository": {
