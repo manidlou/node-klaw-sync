@@ -20,18 +20,18 @@ Usage
 ### klawSync(directory[, options])
 
 - `directory` `<String>`
-- `options` `<Object>` (optional) _all options are `false` by default_
-  - `nodir` `<Boolean>`
+- `options` `<Object>` (optional)
+  - `nodir` `<Boolean>` default: `false`
     - return only files (ignore directories).
-  - `nofile` `<Boolean>`
+  - `nofile` `<Boolean>` default: `false`
     - return only directories (ignore files).
-  - `depthLimit`: `<Number>`
+  - `depthLimit`: `<Number>` default: `-1`
     - the number of times to recurse before stopping. `-1` for unlimited.
-  - `fs`: `<Object>`
+  - `fs`: `<Object>` default: `graceful-fs`
     - custom `fs`, useful when mocking `fs` object.
-  - `filter` `<Function>`
+  - `filter` `<Function>` default: `undefined`
     - function that gets one argument `fn({path: '', stats: {}})` and returns true to include or false to exclude the item.
-  - `traverseAll` `<Boolean>`
+  - `traverseAll` `<Boolean>` default: `true`
     - traverse all subdirectories, regardless of `filter` option. (When set to `true`, `traverseAll` produces similar behavior to the default behavior prior to v4.0.0. The current default of  `traverseAll: false` is equivalent to the old `noRecurseOnFailedFilter: true`).
 - **Return:** `<Array<Object>>` `[{path: '', stats: {}}]`
 
@@ -94,7 +94,7 @@ const paths = klawSync('/some/dir', { filter: filterFn})
 
 _**filter based on stats**_
 
-Here `traverseAll` option is required since we still want to read all directories even if they don't pass the `filter` function, to see if their contents do pass the `filter` function.
+Here `traverseAll` option is required since we still want to read all subdirectories even if they don't pass the `filter` function, to see if their contents do pass the `filter` function.
 
 ```js
 const klawSync = require('klaw-sync')
@@ -102,7 +102,7 @@ const klawSync = require('klaw-sync')
 const refTime = new Date(2017, 3, 24).getTime()
 const filterFn = item => item.stats.mtime.getTime() > refTime
 
-const paths = klawSync('/some/dir', { filter: filterFn })
+const paths = klawSync('/some/dir', { traverseAll: true, filter: filterFn })
 ```
 
 Run tests
@@ -156,7 +156,7 @@ Special thanks to:
 - [jprichardson](https://github.com/jprichardson)
 - [RyanZim](https://github.com/RyanZim)
 
-for their contribution and support.
+for their support.
 
 License
 -------
