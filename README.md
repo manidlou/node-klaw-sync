@@ -32,7 +32,7 @@ Usage
   - `filter` `<Function>` default: `undefined`
     - function that gets one argument `fn({path: '', stats: {}})` and returns true to include or false to exclude the item.
   - `traverseAll` `<Boolean>` default: `true`
-    - traverse all subdirectories, regardless of `filter` option. (When set to `true`, `traverseAll` produces similar behavior to the default behavior prior to v4.0.0. The current default of  `traverseAll: false` is equivalent to the old `noRecurseOnFailedFilter: true`).
+    - traverse all subdirectories, regardless of `filter` option. This can be useful when you have a filter function and still want to traverse all subdirectories even if your filter function doesn't pass for some directories.
 - **Return:** `<Array<Object>>` `[{path: '', stats: {}}]`
 
 Examples
