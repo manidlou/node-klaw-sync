@@ -21,9 +21,9 @@ Usage
 
 - `directory` `<String>`
 - `options` `<Object>` (optional)
-  - `nodir` `<Boolean>` default: `false`
+  - `nodir` `<Boolean>` default: `undefined`
     - return only files (ignore directories).
-  - `nofile` `<Boolean>` default: `false`
+  - `nofile` `<Boolean>` default: `undefined`
     - return only directories (ignore files).
   - `depthLimit`: `<Number>` default: `-1`
     - the number of times to recurse before stopping. `-1` for unlimited.
@@ -31,7 +31,7 @@ Usage
     - custom `fs`, useful when mocking `fs` object.
   - `filter` `<Function>` default: `undefined`
     - function that gets one argument `fn({path: '', stats: {}})` and returns true to include or false to exclude the item.
-  - `traverseAll` `<Boolean>` default: `true`
+  - `traverseAll` `<Boolean>` default: `undefined`
     - traverse all subdirectories, regardless of `filter` option. This can be useful when you have a filter function and still want to traverse all subdirectories even if your filter function doesn't pass for some directories.
 - **Return:** `<Array<Object>>` `[{path: '', stats: {}}]`
 
