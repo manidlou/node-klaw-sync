@@ -31,7 +31,7 @@
     "mkp": "^1.0.1",
     "mocha": "^5.1.1",
     "standard": "^11.0.1",
-    "walk-sync": "^0.3.3"
+    "walk-sync": "^2.0.2"
   },
   "standard": {
     "env": [

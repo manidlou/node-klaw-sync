@@ -5,6 +5,7 @@ const mkp = require('mkp')
 const Benchmark = require('benchmark')
 const walkSync = require('walk-sync')
 const klawSync = require('../klaw-sync.js')
+const pkg = require('../package.json')
 
 const testDir = path.join(__dirname, 'klaw-sync-benchmark-fixtures')
 const paths = [
@@ -13,7 +14,12 @@ const paths = [
   {dirs: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}`, files: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}/{0..9}.txt`} // 100,000
 ]
 
+const walkSyncVersion = pkg.devDependencies['walk-sync'].slice(1)
+const klawSyncVersion = pkg.version
+
 console.log('Running benchmark tests..')
+console.log(`\nwalk-sync version: ${walkSyncVersion}`)
+console.log(`klaw-sync version: ${klawSyncVersion}`)
 paths.forEach(p => {
   setup(p)
   console.log(`\nroot dir length: ${klawSync(testDir).length}`)

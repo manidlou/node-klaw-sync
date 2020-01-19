@@ -131,19 +131,22 @@ Running some [benchmark](https://github.com/bestiejs/benchmark.js) tests on thes
 ```bash
 Running benchmark tests..
 
+walk-sync version: 2.0.2
+klaw-sync version: 6.0.0
+
 root dir length: 1110
-walk-sync x 83.47 ops/sec ±1.93% (70 runs sampled)
-klaw-sync x 159 ops/sec ±1.82% (78 runs sampled)
+walk-sync x 80.71 ops/sec ±1.42% (72 runs sampled)
+klaw-sync x 160 ops/sec ±1.17% (79 runs sampled)
 Fastest is klaw-sync
 
 root dir length: 11110
-walk-sync x 7.49 ops/sec ±3.10% (23 runs sampled)
-klaw-sync x 14.72 ops/sec ±0.24% (40 runs sampled)
+walk-sync x 7.55 ops/sec ±3.39% (23 runs sampled)
+klaw-sync x 14.95 ops/sec ±0.27% (40 runs sampled)
 Fastest is klaw-sync
 
 root dir length: 111110
-walk-sync x 0.70 ops/sec ±4.95% (6 runs sampled)
-klaw-sync x 1.21 ops/sec ±2.23% (7 runs sampled)
+walk-sync x 0.63 ops/sec ±6.92% (6 runs sampled)
+klaw-sync x 1.22 ops/sec ±0.96% (7 runs sampled)
 Fastest is klaw-sync
 ```
 
