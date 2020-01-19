@@ -50,10 +50,10 @@ describe('klaw-sync', () => {
     ]
     const items = klawSync(TEST_DIR)
     assert.strictEqual(items.length, paths.length)
-    items.forEach((p, i) => {
-      assert.deepStrictEqual(p, paths[i])
-      assert.strictEqual(p.path, paths[i].path)
-      assert.deepStrictEqual(p.stats, paths[i].stats)
+    items.forEach(item => {
+      const ent = paths.filter(p => p.path === item.path)[0]
+      assert.strictEqual(item.path, ent.path)
+      assert.deepStrictEqual(item.stats, ent.stats)
     })
   })
 
@@ -65,10 +65,10 @@ describe('klaw-sync', () => {
     ]
     const files = klawSync(TEST_DIR, {nodir: true})
     assert.strictEqual(files.length, filesOnly.length)
-    files.forEach((f, i) => {
-      assert.deepStrictEqual(f, filesOnly[i])
-      assert.strictEqual(f.path, filesOnly[i].path)
-      assert.deepStrictEqual(f.stats, filesOnly[i].stats)
+    files.forEach(f => {
+      const ent = filesOnly.filter(p => p.path === f.path)[0]
+      assert.strictEqual(f.path, ent.path)
+      assert.deepStrictEqual(f.stats, ent.stats)
     })
   })
 

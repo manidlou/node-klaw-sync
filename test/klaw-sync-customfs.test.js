@@ -35,10 +35,10 @@ describe('klaw-sync / custom fs', () => {
     ]
     const items = klawSync(TEST_DIR, {fs: cfs})
     assert.strictEqual(items.length, paths.length)
-    items.forEach((p, i) => {
-      assert.deepStrictEqual(p, paths[i])
-      assert.strictEqual(p.path, paths[i].path)
-      assert.deepStrictEqual(p.stats, paths[i].stats)
+    items.forEach(item => {
+      const ent = paths.filter(p => p.path === item.path)[0]
+      assert.strictEqual(item.path, ent.path)
+      assert.deepStrictEqual(item.stats, ent.stats)
     })
   })
 
@@ -50,10 +50,10 @@ describe('klaw-sync / custom fs', () => {
     ]
     const files = klawSync(TEST_DIR, {nodir: true, fs: cfs})
     assert.strictEqual(files.length, filesOnly.length)
-    files.forEach((f, i) => {
-      assert.deepStrictEqual(f, filesOnly[i])
-      assert.strictEqual(f.path, filesOnly[i].path)
-      assert.deepStrictEqual(f.stats, filesOnly[i].stats)
+    files.forEach(f => {
+      const ent = filesOnly.filter(p => p.path === f.path)[0]
+      assert.strictEqual(f.path, ent.path)
+      assert.deepStrictEqual(f.stats, ent.stats)
     })
   })
 
@@ -90,7 +90,7 @@ describe('klaw-sync / custom fs', () => {
       })
     })
 
-    it('should filter but not recurse if noRecurseOnFailedFilter is true', () => {
+    it('should filter but not recurse if traverseAll is false', () => {
       const dirToIgnore1 = path.join(TEST_DIR, 'node_modules')
       const dirToIgnore2 = path.join(dirToIgnore1, 'somepkg')
       cfs.mkdirpSync(dirToIgnore2)
@@ -104,12 +104,12 @@ describe('klaw-sync / custom fs', () => {
         {path: FILES[2], stats: cfs.statSync(FILES[2])}
       ]
       const filterFunc = i => i.path.indexOf('node_modules') < 0
-      const items = klawSync(TEST_DIR, {filter: filterFunc, noRecurseOnFailedFilter: true, fs: cfs})
+      const items = klawSync(TEST_DIR, {filter: filterFunc, traverseAll: false, fs: cfs})
       assert.strictEqual(items.length, paths.length)
-      items.forEach((p, i) => {
-        assert.deepStrictEqual(p, paths[i])
-        assert.strictEqual(p.path, paths[i].path)
-        assert.deepStrictEqual(p.stats, paths[i].stats)
+      items.forEach(item => {
+        const ent = paths.filter(p => p.path === item.path)[0]
+        assert.strictEqual(item.path, ent.path)
+        assert.deepStrictEqual(item.stats, ent.stats)
       })
     })
 
@@ -128,12 +128,12 @@ describe('klaw-sync / custom fs', () => {
         {path: FILES[2], stats: cfs.statSync(FILES[2])}
       ]
       const filterFunc = i => i.path.indexOf('node_modules') < 0 && i.path.indexOf('.git') < 0
-      const items = klawSync(TEST_DIR, {filter: filterFunc, noRecurseOnFailedFilter: true, fs: cfs})
+      const items = klawSync(TEST_DIR, {filter: filterFunc, traverseAll: false, fs: cfs})
       assert.strictEqual(items.length, paths.length)
-      items.forEach((p, i) => {
-        assert.deepStrictEqual(p, paths[i])
-        assert.strictEqual(p.path, paths[i].path)
-        assert.deepStrictEqual(p.stats, paths[i].stats)
+      items.forEach(item => {
+        const ent = paths.filter(p => p.path === item.path)[0]
+        assert.strictEqual(item.path, ent.path)
+        assert.deepStrictEqual(item.stats, ent.stats)
       })
     })
 

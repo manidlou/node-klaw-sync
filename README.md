@@ -132,31 +132,20 @@ Running some [benchmark](https://github.com/bestiejs/benchmark.js) tests on thes
 Running benchmark tests..
 
 root dir length: 1110
-walk-sync x 139 ops/sec ±2.48% (76 runs sampled)
-klaw-sync x 163 ops/sec ±1.20% (80 runs sampled)
+walk-sync x 83.47 ops/sec ±1.93% (70 runs sampled)
+klaw-sync x 159 ops/sec ±1.82% (78 runs sampled)
 Fastest is klaw-sync
 
 root dir length: 11110
-walk-sync x 13.23 ops/sec ±1.10% (37 runs sampled)
-klaw-sync x 15.10 ops/sec ±1.06% (41 runs sampled)
+walk-sync x 7.49 ops/sec ±3.10% (23 runs sampled)
+klaw-sync x 14.72 ops/sec ±0.24% (40 runs sampled)
 Fastest is klaw-sync
 
 root dir length: 111110
-walk-sync x 1.17 ops/sec ±2.06% (7 runs sampled)
-klaw-sync x 1.25 ops/sec ±2.10% (8 runs sampled)
+walk-sync x 0.70 ops/sec ±4.95% (6 runs sampled)
+klaw-sync x 1.21 ops/sec ±2.23% (7 runs sampled)
 Fastest is klaw-sync
 ```
-
-Credit
-------
-
-Special thanks to:
-
-- [agnivade](https://github.com/agnivade)
-- [jprichardson](https://github.com/jprichardson)
-- [RyanZim](https://github.com/RyanZim)
-
-for their support.
 
 License
 -------
