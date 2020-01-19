@@ -131,9 +131,6 @@ Running some [benchmark](https://github.com/bestiejs/benchmark.js) tests on thes
 ```bash
 Running benchmark tests..
 
-walk-sync version: 2.0.2
-klaw-sync version: 6.0.0
-
 root dir length: 1110
 walk-sync x 80.71 ops/sec ±1.42% (72 runs sampled)
 klaw-sync x 160 ops/sec ±1.17% (79 runs sampled)
