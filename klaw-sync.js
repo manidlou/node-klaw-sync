@@ -13,7 +13,7 @@ function klawSync (dir, opts, ls) {
   const paths = opts.fs.readdirSync(dir).map(p => dir + path.sep + p)
   for (var i = 0; i < paths.length; i += 1) {
     const pi = paths[i]
-    const st = opts.fs.statSync(pi)
+    const st = opts.fs.lstatSync(pi)
     const item = {path: pi, stats: st}
     const isUnderDepthLimit = (!opts.rootDepth || pi.split(path.sep).length - opts.rootDepth < opts.depthLimit)
     const filterResult = opts.filter ? opts.filter(item) : true
