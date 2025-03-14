@@ -2,74 +2,98 @@
 const assert = require('assert')
 const path = require('path')
 const klawSync = require('../klaw-sync.js')
-const Memoryfs = require('memory-fs')
-const cfs = new Memoryfs()
+const { fs: memfs, vol } = require('memfs')
 
 const TEST_DIR = path.join(__dirname, 'klaw-sync-test-custom-fs')
-after(() => cfs.rmdirSync(TEST_DIR))
+after(() => vol.reset())
 
 describe('klaw-sync / custom fs', () => {
   const dirnames = ['dir1', 'dir2', 'dir2/dir2_1', 'dir2/dir2_1/dir2_1_1']
   const filenames = ['dir1/file1_2', 'dir2/dir2_1/file2_1_1', 'file1']
-  cfs.mkdirpSync(TEST_DIR)
   let DIRS, FILES
 
   beforeEach(() => {
-    cfs.rmdirSync(TEST_DIR)
-    cfs.mkdirpSync(TEST_DIR)
-    DIRS = dirnames.map(dir => path.join(TEST_DIR, dir))
-    FILES = filenames.map(f => path.join(TEST_DIR, f))
-    DIRS.forEach(dir => cfs.mkdirpSync(dir))
-    FILES.forEach((f, i) => cfs.writeFileSync(f, i.toString()))
+    vol.reset()
+    // Create directories first
+    dirnames.forEach((dir) => {
+      const fullPath = path.join(TEST_DIR, dir)
+      memfs.mkdirSync(fullPath, { recursive: true })
+    })
+    // Create files
+    filenames.forEach((f, i) => {
+      const fullPath = path.join(TEST_DIR, f)
+      memfs.writeFileSync(fullPath, i.toString())
+    })
+    DIRS = dirnames.map((dir) => path.join(TEST_DIR, dir))
+    FILES = filenames.map((f) => path.join(TEST_DIR, f))
   })
 
   it('should return all items of a dir containing path and stats object', () => {
+    const items = klawSync(TEST_DIR, { fs: memfs })
     const paths = [
-      {path: DIRS[0], stats: cfs.statSync(DIRS[0])},
-      {path: FILES[0], stats: cfs.statSync(FILES[0])},
-      {path: DIRS[1], stats: cfs.statSync(DIRS[1])},
-      {path: DIRS[2], stats: cfs.statSync(DIRS[2])},
-      {path: DIRS[3], stats: cfs.statSync(DIRS[3])},
-      {path: FILES[1], stats: cfs.statSync(FILES[1])},
-      {path: FILES[2], stats: cfs.statSync(FILES[2])}
+      { path: DIRS[0], stats: memfs.lstatSync(DIRS[0]) },
+      { path: FILES[0], stats: memfs.lstatSync(FILES[0]) },
+      { path: DIRS[1], stats: memfs.lstatSync(DIRS[1]) },
+      { path: DIRS[2], stats: memfs.lstatSync(DIRS[2]) },
+      { path: DIRS[3], stats: memfs.lstatSync(DIRS[3]) },
+      { path: FILES[1], stats: memfs.lstatSync(FILES[1]) },
+      { path: FILES[2], stats: memfs.lstatSync(FILES[2]) }
     ]
-    const items = klawSync(TEST_DIR, {fs: cfs})
     assert.strictEqual(items.length, paths.length)
-    items.forEach(item => {
-      const ent = paths.filter(p => p.path === item.path)[0]
+    items.forEach((item) => {
+      const ent = paths.filter((p) => p.path === item.path)[0]
       assert.strictEqual(item.path, ent.path)
-      assert.deepStrictEqual(item.stats, ent.stats)
+      // Compare only the essential stats properties because timestamps like birthtime,ctime, etc. are different by a millisecond
+      const actualStats = item.stats
+      const expectedStats = ent.stats
+      assert.strictEqual(
+        actualStats.isDirectory(),
+        expectedStats.isDirectory()
+      )
+      assert.strictEqual(actualStats.mode, expectedStats.mode)
+      assert.strictEqual(actualStats.uid, expectedStats.uid)
+      assert.strictEqual(actualStats.gid, expectedStats.gid)
+      assert.strictEqual(actualStats.size, expectedStats.size)
     })
   })
 
   it('should return only files if opts.nodir is true', () => {
     const filesOnly = [
-      {path: FILES[0], stats: cfs.statSync(FILES[0])},
-      {path: FILES[1], stats: cfs.statSync(FILES[1])},
-      {path: FILES[2], stats: cfs.statSync(FILES[2])}
+      { path: FILES[0], stats: memfs.lstatSync(FILES[0]) },
+      { path: FILES[1], stats: memfs.lstatSync(FILES[1]) },
+      { path: FILES[2], stats: memfs.lstatSync(FILES[2]) }
     ]
-    const files = klawSync(TEST_DIR, {nodir: true, fs: cfs})
+    const files = klawSync(TEST_DIR, { nodir: true, fs: memfs })
     assert.strictEqual(files.length, filesOnly.length)
-    files.forEach(f => {
-      const ent = filesOnly.filter(p => p.path === f.path)[0]
+    files.forEach((f) => {
+      const ent = filesOnly.filter((p) => p.path === f.path)[0]
       assert.strictEqual(f.path, ent.path)
       assert.deepStrictEqual(f.stats, ent.stats)
     })
   })
 
   it('should return only dirs if opts.nofile is true', () => {
+    const dirs = klawSync(TEST_DIR, { nofile: true, fs: memfs })
     const dirsOnly = [
-      {path: DIRS[0], stats: cfs.statSync(DIRS[0])},
-      {path: DIRS[1], stats: cfs.statSync(DIRS[1])},
-      {path: DIRS[2], stats: cfs.statSync(DIRS[2])},
-      {path: DIRS[3], stats: cfs.statSync(DIRS[3])}
+      { path: DIRS[0], stats: memfs.lstatSync(DIRS[0]) },
+      { path: DIRS[1], stats: memfs.lstatSync(DIRS[1]) },
+      { path: DIRS[2], stats: memfs.lstatSync(DIRS[2]) },
+      { path: DIRS[3], stats: memfs.lstatSync(DIRS[3]) }
     ]
-    const dirs = klawSync(TEST_DIR, {nofile: true, fs: cfs})
     assert.strictEqual(dirs.length, dirsOnly.length)
     dirs.forEach((dir, i) => {
-      assert.deepStrictEqual(dir, dirsOnly[i])
       assert.strictEqual(dir.path, dirsOnly[i].path)
-      assert.deepStrictEqual(dir.stats, dirsOnly[i].stats)
+      // Compare only the essential stats properties
+      const actualStats = dir.stats
+      const expectedStats = memfs.lstatSync(dirsOnly[i].path)
+      assert.strictEqual(
+        actualStats.isDirectory(),
+        expectedStats.isDirectory()
+      )
+      assert.strictEqual(actualStats.mode, expectedStats.mode)
+      assert.strictEqual(actualStats.uid, expectedStats.uid)
+      assert.strictEqual(actualStats.gid, expectedStats.gid)
+      assert.strictEqual(actualStats.size, expectedStats.size)
     })
   })
 
@@ -77,11 +101,11 @@ describe('klaw-sync / custom fs', () => {
     it('should filter based on path', () => {
       const f1 = path.join(TEST_DIR, 'foo.js')
       const f2 = path.join(TEST_DIR, 'bar.js')
-      cfs.writeFileSync(f1, 'f1 file')
-      cfs.writeFileSync(f2, 'f2 file')
-      const paths = [{path: f1, stats: cfs.statSync(f1)}]
-      const filterFunc = i => path.basename(i.path).indexOf('foo') > -1
-      const items = klawSync(TEST_DIR, {filter: filterFunc, fs: cfs})
+      memfs.writeFileSync(f1, 'f1 file')
+      memfs.writeFileSync(f2, 'f2 file')
+      const paths = [{ path: f1, stats: memfs.lstatSync(f1) }]
+      const filterFunc = (i) => path.basename(i.path).indexOf('foo') > -1
+      const items = klawSync(TEST_DIR, { filter: filterFunc, fs: memfs })
       assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
         assert.deepStrictEqual(p, paths[i])
@@ -93,47 +117,77 @@ describe('klaw-sync / custom fs', () => {
     it('should filter but not recurse if traverseAll is false', () => {
       const dirToIgnore1 = path.join(TEST_DIR, 'node_modules')
       const dirToIgnore2 = path.join(dirToIgnore1, 'somepkg')
-      cfs.mkdirpSync(dirToIgnore2)
+      memfs.mkdirSync(dirToIgnore1, { recursive: true })
+      memfs.mkdirSync(dirToIgnore2, { recursive: true })
       const paths = [
-        {path: DIRS[0], stats: cfs.statSync(DIRS[0])},
-        {path: FILES[0], stats: cfs.statSync(FILES[0])},
-        {path: DIRS[1], stats: cfs.statSync(DIRS[1])},
-        {path: DIRS[2], stats: cfs.statSync(DIRS[2])},
-        {path: DIRS[3], stats: cfs.statSync(DIRS[3])},
-        {path: FILES[1], stats: cfs.statSync(FILES[1])},
-        {path: FILES[2], stats: cfs.statSync(FILES[2])}
+        { path: DIRS[0], stats: memfs.lstatSync(DIRS[0]) },
+        { path: FILES[0], stats: memfs.lstatSync(FILES[0]) },
+        { path: DIRS[1], stats: memfs.lstatSync(DIRS[1]) },
+        { path: DIRS[2], stats: memfs.lstatSync(DIRS[2]) },
+        { path: DIRS[3], stats: memfs.lstatSync(DIRS[3]) },
+        { path: FILES[1], stats: memfs.lstatSync(FILES[1]) },
+        { path: FILES[2], stats: memfs.lstatSync(FILES[2]) }
       ]
-      const filterFunc = i => i.path.indexOf('node_modules') < 0
-      const items = klawSync(TEST_DIR, {filter: filterFunc, traverseAll: false, fs: cfs})
+      const filterFunc = (i) => i.path.indexOf('node_modules') < 0
+      const items = klawSync(TEST_DIR, {
+        filter: filterFunc,
+        traverseAll: false,
+        fs: memfs
+      })
       assert.strictEqual(items.length, paths.length)
-      items.forEach(item => {
-        const ent = paths.filter(p => p.path === item.path)[0]
+      items.forEach((item) => {
+        const ent = paths.filter((p) => p.path === item.path)[0]
         assert.strictEqual(item.path, ent.path)
-        assert.deepStrictEqual(item.stats, ent.stats)
+        // Compare only the essential stats properties because timestamps like birthtime,ctime, etc. are different by a millisecond
+        const actualStats = item.stats
+        const expectedStats = ent.stats
+        assert.strictEqual(
+          actualStats.isDirectory(),
+          expectedStats.isDirectory()
+        )
+        assert.strictEqual(actualStats.mode, expectedStats.mode)
+        assert.strictEqual(actualStats.uid, expectedStats.uid)
+        assert.strictEqual(actualStats.gid, expectedStats.gid)
+        assert.strictEqual(actualStats.size, expectedStats.size)
       })
     })
 
     it('should filter when it is used to ignore items', () => {
       const dirToIgnore1 = path.join(TEST_DIR, 'node_modules')
       const dirToIgnore2 = path.join(TEST_DIR, '.git')
-      cfs.mkdirpSync(dirToIgnore1)
-      cfs.mkdirpSync(dirToIgnore2)
+      memfs.mkdirSync(dirToIgnore1, { recursive: true })
+      memfs.mkdirSync(dirToIgnore2, { recursive: true })
       const paths = [
-        {path: DIRS[0], stats: cfs.statSync(DIRS[0])},
-        {path: FILES[0], stats: cfs.statSync(FILES[0])},
-        {path: DIRS[1], stats: cfs.statSync(DIRS[1])},
-        {path: DIRS[2], stats: cfs.statSync(DIRS[2])},
-        {path: DIRS[3], stats: cfs.statSync(DIRS[3])},
-        {path: FILES[1], stats: cfs.statSync(FILES[1])},
-        {path: FILES[2], stats: cfs.statSync(FILES[2])}
+        { path: DIRS[0], stats: memfs.lstatSync(DIRS[0]) },
+        { path: FILES[0], stats: memfs.lstatSync(FILES[0]) },
+        { path: DIRS[1], stats: memfs.lstatSync(DIRS[1]) },
+        { path: DIRS[2], stats: memfs.lstatSync(DIRS[2]) },
+        { path: DIRS[3], stats: memfs.lstatSync(DIRS[3]) },
+        { path: FILES[1], stats: memfs.lstatSync(FILES[1]) },
+        { path: FILES[2], stats: memfs.lstatSync(FILES[2]) }
       ]
-      const filterFunc = i => i.path.indexOf('node_modules') < 0 && i.path.indexOf('.git') < 0
-      const items = klawSync(TEST_DIR, {filter: filterFunc, traverseAll: false, fs: cfs})
+      const filterFunc = (i) =>
+        i.path.indexOf('node_modules') < 0 && i.path.indexOf('.git') < 0
+      const items = klawSync(TEST_DIR, {
+        filter: filterFunc,
+        traverseAll: false,
+        fs: memfs
+      })
       assert.strictEqual(items.length, paths.length)
-      items.forEach(item => {
-        const ent = paths.filter(p => p.path === item.path)[0]
+      items.forEach((item) => {
+        const ent = paths.filter((p) => p.path === item.path)[0]
         assert.strictEqual(item.path, ent.path)
-        assert.deepStrictEqual(item.stats, ent.stats)
+        // Compare only the essential stats properties because timestamps like birthtime,ctime, etc. are different by a millisecond
+        const actualStats = item.stats
+        const expectedStats = ent.stats
+        assert.strictEqual(
+          actualStats.isDirectory(),
+          expectedStats.isDirectory()
+        )
+        assert.strictEqual(actualStats.mode, expectedStats.mode)
+        assert.strictEqual(actualStats.uid, expectedStats.uid)
+        assert.strictEqual(actualStats.gid, expectedStats.gid)
+        assert.strictEqual(actualStats.size, expectedStats.size)
       })
     })
 
@@ -141,15 +195,19 @@ describe('klaw-sync / custom fs', () => {
       const f = path.join(TEST_DIR, 'foo.js')
       const d1 = path.join(TEST_DIR, 'foo')
       const d2 = path.join(TEST_DIR, 'foobar')
-      cfs.writeFileSync(f, 'file contents')
-      cfs.mkdirpSync(d1)
-      cfs.mkdirpSync(d2)
+      memfs.writeFileSync(f, 'file contents')
+      memfs.mkdirSync(d1, { recursive: true })
+      memfs.mkdirSync(d2, { recursive: true })
       const paths = [
-        {path: d1, stats: cfs.statSync(d1)},
-        {path: d2, stats: cfs.statSync(d2)}
+        { path: d1, stats: memfs.lstatSync(d1) },
+        { path: d2, stats: memfs.lstatSync(d2) }
       ]
-      const filterFunc = i => i.path.indexOf('foo') > 0
-      const items = klawSync(TEST_DIR, {filter: filterFunc, nofile: true, fs: cfs})
+      const filterFunc = (i) => i.path.indexOf('foo') > 0
+      const items = klawSync(TEST_DIR, {
+        filter: filterFunc,
+        nofile: true,
+        fs: memfs
+      })
       assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
         assert.deepStrictEqual(p, paths[i])
