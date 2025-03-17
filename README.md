@@ -147,11 +147,6 @@ klaw-sync x 1.22 ops/sec ±0.96% (7 runs sampled)
 Fastest is klaw-sync
 ```
 
-License
--------
-
-Licensed under MIT
-
 Contributing
 -----------
 
@@ -175,3 +170,8 @@ Before submitting a PR:
 - Ensure tests pass: `npm test`
 - Add tests for new features
 - Follow the existing code style
+
+License
+-------
+
+Licensed under MIT
