@@ -1,3 +1,9 @@
+7.0.0 / 2025-03-17
+------------------
+
+### Changed
+- Use `lstatSync` instead of `statSync`. [#20] (Thanks to [@vic3king](https://github.com/vic3king))
+
 6.0.0 / 2018-09-22
 ------------------
 
