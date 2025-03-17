@@ -151,3 +151,27 @@ License
 -------
 
 Licensed under MIT
+
+Contributing
+-----------
+
+1. Fork the repository
+2. Clone your forked version
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/node-klaw-sync.git
+   ```
+3. Create a new branch for your changes
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+4. Make your changes and commit them
+5. Push to your fork
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+6. Create a Pull Request from your fork to the original repository
+
+Before submitting a PR:
+- Ensure tests pass: `npm test`
+- Add tests for new features
+- Follow the existing code style
