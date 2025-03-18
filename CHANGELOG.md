@@ -77,3 +77,4 @@
 [#1]: https://github.com/manidlou/node-klaw-sync/issues/1 "loading all files with certain name"
 [#12]: https://github.com/manidlou/node-klaw-sync/pull/12 "Fixing logic issues"
 [#13]: https://github.com/manidlou/node-klaw-sync/pull/13 "Traverse all option"
+[#20]: https://github.com/manidlou/node-klaw-sync/pull/20 "Use lstatSync instead of statSync"
