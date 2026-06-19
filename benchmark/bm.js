@@ -8,9 +8,9 @@ const klawSync = require('../klaw-sync.js')
 
 const testDir = path.join(__dirname, 'klaw-sync-benchmark-fixtures')
 const paths = [
-  {dirs: `${testDir}/{0..9}/{0..9}`, files: `${testDir}/{0..9}/{0..9}/{0..9}.txt`}, // 1000 files
-  {dirs: `${testDir}/{0..9}/{0..9}/{0..9}`, files: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}.txt`}, // 10,000
-  {dirs: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}`, files: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}/{0..9}.txt`} // 100,000
+  { dirs: `${testDir}/{0..9}/{0..9}`, files: `${testDir}/{0..9}/{0..9}/{0..9}.txt` }, // 1000 files
+  { dirs: `${testDir}/{0..9}/{0..9}/{0..9}`, files: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}.txt` }, // 10,000
+  { dirs: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}`, files: `${testDir}/{0..9}/{0..9}/{0..9}/{0..9}/{0..9}.txt` } // 100,000
 ]
 
 console.log('Running benchmark tests..')

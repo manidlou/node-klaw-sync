@@ -40,13 +40,13 @@ describe('klaw-sync', () => {
 
   it('should return all items of a dir containing path and stats object', () => {
     const paths = [
-      {path: DIRS[0], stats: fs.statSync(DIRS[0])},
-      {path: FILES[0], stats: fs.statSync(FILES[0])},
-      {path: DIRS[1], stats: fs.statSync(DIRS[1])},
-      {path: DIRS[2], stats: fs.statSync(DIRS[2])},
-      {path: DIRS[3], stats: fs.statSync(DIRS[3])},
-      {path: FILES[1], stats: fs.statSync(FILES[1])},
-      {path: FILES[2], stats: fs.statSync(FILES[2])}
+      { path: DIRS[0], stats: fs.statSync(DIRS[0]) },
+      { path: FILES[0], stats: fs.statSync(FILES[0]) },
+      { path: DIRS[1], stats: fs.statSync(DIRS[1]) },
+      { path: DIRS[2], stats: fs.statSync(DIRS[2]) },
+      { path: DIRS[3], stats: fs.statSync(DIRS[3]) },
+      { path: FILES[1], stats: fs.statSync(FILES[1]) },
+      { path: FILES[2], stats: fs.statSync(FILES[2]) }
     ]
     const items = klawSync(TEST_DIR)
     assert.strictEqual(items.length, paths.length)
@@ -59,11 +59,11 @@ describe('klaw-sync', () => {
 
   it('should return only files if opts.nodir is true', () => {
     const filesOnly = [
-      {path: FILES[0], stats: fs.lstatSync(FILES[0])},
-      {path: FILES[1], stats: fs.lstatSync(FILES[1])},
-      {path: FILES[2], stats: fs.lstatSync(FILES[2])}
+      { path: FILES[0], stats: fs.lstatSync(FILES[0]) },
+      { path: FILES[1], stats: fs.lstatSync(FILES[1]) },
+      { path: FILES[2], stats: fs.lstatSync(FILES[2]) }
     ]
-    const files = klawSync(TEST_DIR, {nodir: true})
+    const files = klawSync(TEST_DIR, { nodir: true })
     assert.strictEqual(files.length, filesOnly.length)
     files.forEach(f => {
       const ent = filesOnly.filter(p => p.path === f.path)[0]
@@ -74,12 +74,12 @@ describe('klaw-sync', () => {
 
   it('should return only dirs if opts.nofile is true', () => {
     const dirsOnly = [
-      {path: DIRS[0], stats: fs.lstatSync(DIRS[0])},
-      {path: DIRS[1], stats: fs.lstatSync(DIRS[1])},
-      {path: DIRS[2], stats: fs.lstatSync(DIRS[2])},
-      {path: DIRS[3], stats: fs.lstatSync(DIRS[3])}
+      { path: DIRS[0], stats: fs.lstatSync(DIRS[0]) },
+      { path: DIRS[1], stats: fs.lstatSync(DIRS[1]) },
+      { path: DIRS[2], stats: fs.lstatSync(DIRS[2]) },
+      { path: DIRS[3], stats: fs.lstatSync(DIRS[3]) }
     ]
-    const dirs = klawSync(TEST_DIR, {nofile: true})
+    const dirs = klawSync(TEST_DIR, { nofile: true })
     assert.strictEqual(dirs.length, dirsOnly.length)
     dirs.forEach((dir, i) => {
       assert.deepStrictEqual(dir, dirsOnly[i])
@@ -94,9 +94,9 @@ describe('klaw-sync', () => {
       const f2 = path.join(TEST_DIR, 'bar.js')
       fs.ensureFileSync(f1)
       fs.ensureFileSync(f2)
-      const paths = [{path: f1, stats: fs.statSync(f1)}]
+      const paths = [{ path: f1, stats: fs.statSync(f1) }]
       const filterFunc = i => path.basename(i.path).indexOf('foo') > -1
-      const items = klawSync(TEST_DIR, {filter: filterFunc})
+      const items = klawSync(TEST_DIR, { filter: filterFunc })
       assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
         assert.deepStrictEqual(p, paths[i])
@@ -111,11 +111,11 @@ describe('klaw-sync', () => {
       fs.outputFileSync(f1, 'test file 1 contents')
       fs.outputFileSync(f2, 'test file 2 contents')
       const paths = [
-        {path: f1, stats: fs.statSync(f1)},
-        {path: f2, stats: fs.statSync(f2)}
+        { path: f1, stats: fs.statSync(f1) },
+        { path: f2, stats: fs.statSync(f2) }
       ]
       const filterFunc = i => i.path === TEST_DIR || (i.stats.isFile() && i.stats.size > 0)
-      const items = klawSync(TEST_DIR, {filter: filterFunc})
+      const items = klawSync(TEST_DIR, { filter: filterFunc })
       items.sort()
       assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
@@ -130,9 +130,9 @@ describe('klaw-sync', () => {
       const f2 = path.join(TEST_DIR, 'bar.js')
       fs.outputFileSync(f1, 'test file 1 contents')
       fs.outputFileSync(f2, 'test file 2 contents')
-      const paths = [{path: f1, stats: fs.statSync(f1)}]
+      const paths = [{ path: f1, stats: fs.statSync(f1) }]
       const filterFunc = i => i.path === TEST_DIR || (path.basename(i.path).indexOf('foo') > -1 && i.stats.isFile() && i.stats.size > 0)
-      const items = klawSync(TEST_DIR, {filter: filterFunc})
+      const items = klawSync(TEST_DIR, { filter: filterFunc })
       assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
         assert.deepStrictEqual(p, paths[i])
@@ -147,7 +147,7 @@ describe('klaw-sync', () => {
       fs.ensureDirSync(dir1)
       fs.ensureDirSync(dir2)
       const filterFunc = i => path.basename(i.path) === '.' || path.basename(i.path)[0] !== '.'
-      const items = klawSync(TEST_DIR, {filter: filterFunc})
+      const items = klawSync(TEST_DIR, { filter: filterFunc })
       assert(items.length > 0)
       items.forEach(p => {
         assert(p.path !== dir1)
@@ -161,11 +161,11 @@ describe('klaw-sync', () => {
       fs.outputFileSync(f1, 'test file 1 contents')
       fs.outputFileSync(f2, 'test file 2 contents')
       const paths = [
-        {path: f1, stats: fs.statSync(f1)},
-        {path: f2, stats: fs.statSync(f2)}
+        { path: f1, stats: fs.statSync(f1) },
+        { path: f2, stats: fs.statSync(f2) }
       ]
       const filterFunc = i => i.path === TEST_DIR || (i.stats.isFile() && i.stats.size > 0)
-      const items = klawSync(TEST_DIR, {filter: filterFunc, nodir: true})
+      const items = klawSync(TEST_DIR, { filter: filterFunc, nodir: true })
       items.sort()
       assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
@@ -183,11 +183,11 @@ describe('klaw-sync', () => {
       fs.ensureDirSync(d1)
       fs.ensureDirSync(d2)
       const paths = [
-        {path: d1, stats: fs.statSync(d1)},
-        {path: d2, stats: fs.statSync(d2)}
+        { path: d1, stats: fs.statSync(d1) },
+        { path: d2, stats: fs.statSync(d2) }
       ]
       const filterFunc = i => i.path.indexOf('foo') > 0
-      const items = klawSync(TEST_DIR, {filter: filterFunc, nofile: true})
+      const items = klawSync(TEST_DIR, { filter: filterFunc, nofile: true })
       assert.strictEqual(items.length, paths.length)
       items.forEach((p, i) => {
         assert.deepStrictEqual(p, paths[i])
@@ -264,7 +264,7 @@ describe('klaw-sync', () => {
         fs.outputFileSync(f, path.basename(f, path.extname(f)))
       })
 
-      const items = klawSync(TEST_DIR, {depthLimit: -1, nodir: true, filter: filterFunction}).map(i => i.path)
+      const items = klawSync(TEST_DIR, { depthLimit: -1, nodir: true, filter: filterFunction }).map(i => i.path)
       items.sort()
       expected = expected.map(item => path.join(path.join(TEST_DIR, item)))
       assert.deepStrictEqual(items, expected)
@@ -290,7 +290,7 @@ describe('klaw-sync', () => {
         fs.outputFileSync(f, path.basename(f, path.extname(f)))
       })
 
-      const items = klawSync(TEST_DIR, {depthLimit: -1, nodir: true, filter: filterFunction}).map(i => i.path)
+      const items = klawSync(TEST_DIR, { depthLimit: -1, nodir: true, filter: filterFunction }).map(i => i.path)
       items.sort()
       expected = expected.map(item => path.join(path.join(TEST_DIR, item)))
       assert.deepStrictEqual(items, expected)
@@ -310,7 +310,7 @@ describe('klaw-sync', () => {
         fs.outputFileSync(f, path.basename(f, path.extname(f)))
       })
 
-      const items = klawSync(TEST_DIR, {depthLimit: depthLimit, nodir: true}).map(i => i.path)
+      const items = klawSync(TEST_DIR, { depthLimit, nodir: true }).map(i => i.path)
       items.sort()
       expected = expected.map(item => path.join(path.join(TEST_DIR, item)))
       assert.deepStrictEqual(items, expected)
@@ -329,7 +329,7 @@ describe('klaw-sync', () => {
         fs.outputFileSync(f, path.basename(f, path.extname(f)))
       })
 
-      const items = klawSync(TEST_DIR, {depthLimit: depthLimit}).map(i => i.path)
+      const items = klawSync(TEST_DIR, { depthLimit }).map(i => i.path)
       items.sort()
       expected = expected.map(item => path.join(path.join(TEST_DIR, item)))
       assert.deepStrictEqual(items, expected)
