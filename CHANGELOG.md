@@ -1,3 +1,9 @@
+8.0.0 / 2026-06-19
+------------------
+
+### Changed
+- Moved `memfs` to dev deps. [#25] (Thanks to [@chadlwilson](https://github.com/chadlwilson))
+
 7.0.0 / 2025-03-17
 ------------------
 
